@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 05, 2017 at 01:48 AM
+-- Generation Time: Oct 05, 2017 at 01:54 AM
 -- Server version: 10.1.26-MariaDB
 -- PHP Version: 7.1.9
 
@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `course` (
   `course_id` int(20) NOT NULL,
-  `course_owner` varchar(20) DEFAULT NULL
+  `course_owner` int(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -53,7 +53,7 @@ CREATE TABLE `exam` (
 --
 
 CREATE TABLE `user` (
-  `id` int(10) NOT NULL,
+  `id` int(20) NOT NULL,
   `full_name` varchar(20) DEFAULT NULL,
   `password` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -65,7 +65,7 @@ CREATE TABLE `user` (
 --
 
 CREATE TABLE `user_student` (
-  `id` int(10) NOT NULL,
+  `id` int(20) NOT NULL,
   `full_name` varchar(20) DEFAULT NULL,
   `password` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -77,7 +77,7 @@ CREATE TABLE `user_student` (
 --
 
 CREATE TABLE `user_teacher` (
-  `id` int(10) NOT NULL,
+  `id` int(20) NOT NULL,
   `full_name` varchar(20) DEFAULT NULL,
   `password` varchar(20) DEFAULT NULL,
   `num_courses` int(3) DEFAULT NULL
