@@ -2,7 +2,7 @@
 
 .login-page {
   width: 360px;
-  padding: 8% 0 0;
+  padding: 2% 0 0;
   margin: auto;
 }
 .form {
@@ -10,7 +10,7 @@
   z-index: 1;
   background: #FFFFFF;
   max-width: 360px;
-  margin: 0 auto 100px;
+  margin: 0 auto 200px;
   padding: 45px;
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
@@ -88,6 +88,49 @@
 .container .info span .fa {
   color: #EF3B3A;
 }
+/*---------------------------------------------------------------------*/
+#logo {
+  width: 980px;
+  height: 100px;
+  margin: 0px auto;
+  padding: 80px 0px 0px 0px;
+  color: #FFFFFF;
+}
+
+#logo h1, #logo p {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+#logo h1 {
+  margin: 0px;
+  letter-spacing: -1px;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 54px;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+
+#logo h1 a {
+  color: #FFFFFF;
+}
+
+#logo p {
+  text-align: center;
+  text-transform: uppercase;
+  font-family: 'Arvo', serif;
+  font-size: 20px;
+}
+
+#logo a {
+  border: none;
+  background: none;
+  text-decoration: none;
+  color: #FFFFFF;
+}
+
 body {
   background: #76b852; /* fallback for old browsers */
   background: -webkit-linear-gradient(right, #76b852, #8DC26F);
