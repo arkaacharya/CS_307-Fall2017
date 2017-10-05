@@ -1,3 +1,4 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
 /*
 Design by Free CSS Templates
@@ -8,7 +9,7 @@ Released for free under a Creative Commons Attribution 2.5 License
 body {
 	margin: 0;
 	padding: 0;
-	background: #4aa272;
+	background: linear-gradient(to left, #76b852, #8DC26F);
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 13px;
 	color: #737373;
@@ -40,6 +41,12 @@ p, ul, ol {
 }
 
 ul, ol {
+}
+
+
+
+.entry h2 {
+	font-family: "Roboto", sans-serif;
 }
 
 a {
@@ -171,7 +178,9 @@ img.aligncenter {
 
 #menu li {
 	display: inline-block;
+
 }
+
 
 #menu a {
 	display: block;
@@ -183,8 +192,8 @@ img.aligncenter {
 	letter-spacing: -1px;
 	text-decoration: none;
 	text-transform: uppercase;
-	font-family: 'Arvo', serif;
-	font-size: 14px;
+	font-family: "Roboto", sans-serif;
+	font-size: 16px;
 	font-weight: normal;
 	color: #FFFFFF;
 	border: none;
