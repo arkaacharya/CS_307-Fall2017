@@ -1,6 +1,6 @@
 <html>
   <head>
-    <link rel="stylesheet" href="css/login.css" type="text/css">
+    <link rel="stylesheet" href="login.css" type="text/css">
     <script language="javascript" type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script language="javascript" type="text/javascript" src="js/login.js"></script>
   </head>
@@ -31,6 +31,9 @@
           <form class="login-form"
             action = "validateLogin.php"
             method = "post">
+			<?php if(isset($_GET['failLogin'])){echo "Failed Loin. Please Try Again";} ?>
+			<input type="radio" name="account" value="teacher">Teacher</input>
+			<input type="radio" name="account" value="student">Student</input>
             <input type="text" placeholder="username" name="username" size="20" maxlength="20"/>
             <input type="password" placeholder="password" name="password"  size="20" maxlength="20"/>
             <button id="login">login</button>
