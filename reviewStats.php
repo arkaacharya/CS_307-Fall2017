@@ -7,6 +7,13 @@
 
 <body>
 
+<style>
+#table{
+    text-align: center;
+    display: table;
+}
+</style>
+
 <?php
 
 	$servername = "localhost"; //Name of the server
@@ -20,6 +27,7 @@
 	}
 
 	$userName = $_GET['userName'];
+	$course = $_GET['course'];
 	
 	$sql = "SELECT name, bio, loggedIn From teachers WHERE username='".$userName."'";
 	$data = mysqli_query($conn, $sql);
@@ -63,75 +71,53 @@
 				<div id="content">
 					<div style="clear: both;">&nbsp;</div>
 					<div style="clear: both;">&nbsp;</div>
-					
-					<form
-					action=""
-					method="post"
-					>
-					<div class="entry">
-						<h2 class="title">Add Course</h2>
-
-						<?php
-						
-							if(isset($_GET['failAddTest'])){
-								?>
-								
-									</h4> Course Already Exists </h4>
-								
-								<?php
-							}
-						
-						?>
-						
-						<h4>Course Name: <input type="text"
-								name="course"></input></h4>
-								
-						<h4>Num MCQ: <input type="number"
-								name="numMCQ"></input></h4>
-								
-						<h4>Num Exam MCQ: <input type="number"
-								name="ExamMCQ"></input></h4>
-
-						<h4>Num Essay: <input type="number"
-								name="numEssay"></input></h4>
-
-						<h4>Num Exam Essay: <input type="number"
-								name="ExamEssay"></input></h4>
-
-						<h4>Time Limit: <input type="number"
-								name="timeLimit"></input></h4>
-								
-						<button id="login">Add Course</button>
-						<h3 class="link"><a href="teacherCoursesPage.php?userName=<?php echo $userName; ?>">Back to Courses</a></h3>
-					</div>
-					</form>
-					
-					<?php
-					
-						if(isset($_POST['course']) && isset($_POST['numMCQ']) && isset($_POST['numEssay']) && isset($_POST['timeLimit'])){
-							$sql = "SELECT * FROM courses WHERE id='".$_POST['course'].$userName."'";
-							$data = mysqli_query($conn, $sql);
-							$result = mysqli_fetch_row($data);
-							if(!$result){
-
-								$sql = "INSERT INTO courses (ID, name, numMCQ, numEssay, ExamMCQ, ExamEssay, timeLimit, owner) 
-										VALUES ('".$_POST['course'].$userName."', '".$_POST['course']."', ".$_POST['numMCQ'].", ".$_POST['numEssay'].", ".$_POST['ExamMCQ'].", ".$_POST['ExamEssay'].", ".$_POST['timeLimit'].",'".$userName."')";
-
-								$data = mysqli_query($conn, $sql);
-								
-								$sql = "INSERT INTO ".$userName." (course) VALUES ('".$_POST['course']."')";
-								$data = mysqli_query($conn, $sql);
-								
-								header("Location: courseQuestions.php?userName=".$userName."&course=".$_POST['course']);
-								die;
-							}
-							else{
-								header("Location: teacherAddCourse.php?failAddTest=true&userName=".$userName);
-								die;
-							}
-						}
-					
+	
+					<h3>Test Statistics</h3>
+					<?php	$sql = "SELECT MIN(finalPercentage), MAX(finalPercentage), AVG(finalPercentage) FROM studentanswers WHERE course='".$course."'";
+					$data = mysqli_query($conn, $sql);
+					$result = mysqli_fetch_row($data);
+					$min = $result[0];
+					$max = $result[1];
+					$avg = $result[2];
 					?>
+						<h4><?php echo "Max Grade: ".$max ?></h4>
+						<h4><?php echo "Min Grade: ".$min ?></h4>
+						<h4><?php echo "Average Grade: ".$avg ?></h4>
+					
+					</br></br>
+					
+					<h3>Student Scores</h3>
+					
+					<table border="1" id="table">
+						<tr>
+							<td><h4>Student Name</h4></td>
+							<td><h4>Total MCQ Grade</h4></td>
+							<td><h4>Total Essay Grade</h4></td>
+							<td><h4>Final Percentage</h4></td>
+						</tr>
+						<?php
+						$sql = "SELECT numMCQ FROM courses WHERE name='".$course."'";
+						$data = mysqli_query($conn, $sql);
+						$result = mysqli_fetch_row($data);
+						$numMCQ = $result[0];
+						
+						$sql = "SELECT studentName, totalCorrect, achievedEssayGrade, totalEssayGrade, finalPercentage FROM studentanswers WHERE course='".$course."'";
+						$data = mysqli_query($conn, $sql);
+						$result = mysqli_fetch_row($data);
+						
+						while($result){
+						?>
+						<tr>
+							<td><h4><?php echo $result[0]; ?></h4></td>
+							<td><h4><?php echo $result[1]."/".$numMCQ; ?></h4></td>
+							<td><h4><?php echo $result[2]."/".$result[3]; ?></h4></td>
+							<td><h4><?php echo $result[4]; ?></h4></td>
+						</tr>
+						<?php
+							$result = mysqli_fetch_row($data);
+						}
+						?>
+					</table>
 					
 					<div>
 						<h3 class="link"><a href="logout.php?account=teacher&userName=<?php echo $userName; ?>">Logout</a></h3>

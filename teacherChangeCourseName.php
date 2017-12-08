@@ -69,64 +69,47 @@
 					method="post"
 					>
 					<div class="entry">
-						<h2 class="title">Add Course</h2>
+						<h2 class="title">Change Course Name Course</h2>
 
+						<h4>Select Course:<select name="courseName">
+						<option value=""></option>
 						<?php
-						
-							if(isset($_GET['failAddTest'])){
-								?>
-								
-									</h4> Course Already Exists </h4>
-								
-								<?php
-							}
-						
+							$sql = "SELECT course From ".$userName;
+							$data = mysqli_query($conn, $sql);
+							$result = mysqli_fetch_row($data);
+							while($result){
 						?>
+						<option value = "<?php echo $result[0]; ?>"><?php echo $result[0];?></option>
+						<?php
+								$result = mysqli_fetch_row($data);
+							}
+						?>
+						</select></h4>
 						
-						<h4>Course Name: <input type="text"
-								name="course"></input></h4>
+						<h4>New Course Name: <input type="text"
+								name="newCourseName"></input></h4>
 								
-						<h4>Num MCQ: <input type="number"
-								name="numMCQ"></input></h4>
-								
-						<h4>Num Exam MCQ: <input type="number"
-								name="ExamMCQ"></input></h4>
-
-						<h4>Num Essay: <input type="number"
-								name="numEssay"></input></h4>
-
-						<h4>Num Exam Essay: <input type="number"
-								name="ExamEssay"></input></h4>
-
-						<h4>Time Limit: <input type="number"
-								name="timeLimit"></input></h4>
-								
-						<button id="login">Add Course</button>
+						<button id="login">Change Course Name</button>
 						<h3 class="link"><a href="teacherCoursesPage.php?userName=<?php echo $userName; ?>">Back to Courses</a></h3>
 					</div>
 					</form>
 					
 					<?php
 					
-						if(isset($_POST['course']) && isset($_POST['numMCQ']) && isset($_POST['numEssay']) && isset($_POST['timeLimit'])){
-							$sql = "SELECT * FROM courses WHERE id='".$_POST['course'].$userName."'";
+						if(isset($_POST['courseName']) && isset($_POST['newCourseName'])){
+							$sql = "SELECT * FROM courses WHERE id='".$_POST['courseName'].$userName."'";
 							$data = mysqli_query($conn, $sql);
 							$result = mysqli_fetch_row($data);
-							if(!$result){
-
-								$sql = "INSERT INTO courses (ID, name, numMCQ, numEssay, ExamMCQ, ExamEssay, timeLimit, owner) 
-										VALUES ('".$_POST['course'].$userName."', '".$_POST['course']."', ".$_POST['numMCQ'].", ".$_POST['numEssay'].", ".$_POST['ExamMCQ'].", ".$_POST['ExamEssay'].", ".$_POST['timeLimit'].",'".$userName."')";
-
+							if($result){
+								$sql = "UPDATE courses SET name = $_POST['newCourseName'] WHERE name = courseName";
 								$data = mysqli_query($conn, $sql);
 								
-								$sql = "INSERT INTO ".$userName." (course) VALUES ('".$_POST['course']."')";
-								$data = mysqli_query($conn, $sql);
+								//I'm not sure if this changes the information right am I on the right track?
 								
-								header("Location: courseQuestions.php?userName=".$userName."&course=".$_POST['course']);
 								die;
 							}
 							else{
-								header("Location: teacherAddCourse.php?failAddTest=true&userName=".$userName);
+								header("Location: teacherChangeCourseName.php?failChangeName=true&userName=".$userName);
 								die;
 							}
 						}

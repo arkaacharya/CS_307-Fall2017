@@ -81,6 +81,7 @@
 						<h3 class="link"><a href="teacherAddCourse.php?userName=<?php echo $userName; ?>">Add Courses</a></h3>
 						<h3 class="link"><a href="teacherCloneCourse.php?userName=<?php echo $userName; ?>">Clone Courses</a></h3>
 						<h3 class="link"><a href="teacherDeleteCourse.php?userName=<?php echo $userName; ?>">Delete Courses</a></h3>
+						<h3 class="link"><a href="teacherChangeCourseName.php?userName=<?php echo $userName; ?>">Change Course Name</a></h3>
 					</div>
 					
 					
