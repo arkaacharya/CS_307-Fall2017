@@ -3,66 +3,116 @@
 <form>
 	<?php
 		$servername = "localhost"; //Name of server
-		$dbname = "OnTheExamLine"; //Name of database
-		$username = "root"; //Username used to connect to database
+		$dbname = "examination"; //Name of database
+		$username = "root"; //Username used to connedt to database
 		$password = NULL; //Password used to connect to database
 		
-		$userName = $_POST['username']; //Getting the username
-		echo $userName = preg_replace('/\s+/', '', $_POST['username']);
-		
-		$passWord = $_POST['password']; //Getting the password
-		echo $passWord = preg_replace('/\s+/', '', $_POST['password']);
-		
-		$nameOfUser = $_POST['nameOfUser']; //Gettign the user's name
-		
-		$chapter = $_POST['chapter']; //Getting the chapter
-
-		if ($userName == "" || $passWord == "" || $nameOfUser == "" ){
-			
-			header("Location: newUserInformation.php?acessor=admin"); //Redirecting to the next page
-			die; //Terminating this page
+		if(!isset($_POST['account'])){
+			header("Location: register.php?failRegister=account");
+			die;
 		}
 		
+		$email = $_POST['email']; //Getting the user's username
+		$userName = $_POST['userName'];
+		$passWord = $_POST['password']; //Getting the user's password
+		$account = $_POST['account'];
+		$name = $_POST['name'];
+	
+		if(preg_replace('/\s+/', '', $email) == "" || preg_replace('/\s+/', '', $passWord) == "" || preg_replace('/\s+/', '', $account) == "" || preg_replace('/\s+/', '', $name) == ""){
+			header("Location: register.php?failRegister=account");
+			die;
+		}
 		$conn = new mysqli($servername, $username, $password, $dbname); //Establishing connection to the database
 		if($conn->error){ //Checking connection for errors
 			die("Could not establish connection to database."); //Terminating this page
 		}
 		
-		//Constructing an sql query to check if the user already exists
-		$sql = "SELECT password FROM users WHERE username = \"".$userName."\"";
-		$data = mysqli_query($conn, $sql); //Executing the query
-		$result = mysqli_fetch_row($data); //Extracting information from the query
-		
-		if($result){ //Checking if information was received
-			header("Location: userAlreadyExists.php?acessor=admin"); //Redirecting to error page
-			die; //Terminating this page
-		}
-		
-		//Constructing an sql query to create a table for the user to store the chapters of the user
-		$sql = "CREATE TABLE ".$userName."(flag INT UNSIGNED,
-		chapter VARCHAR(600) PRIMARY KEY)";
-		$data = mysqli_query($conn, $sql); //Executing the query
-		
-		//Constructing an sql query to insert the chapter name in the appropriate table
-		$sql = "INSERT INTO ".$userName." (flag, chapter) VALUES (1, \"".$chapter."\")";
-		$data = mysqli_query($conn, $sql); //Executing the query
-		
-		$flag = 1; //Initializing the flag
-		//Constructing an sql query to get the next username in the table
-		$sql = "SELECT username FROM users";
-		$data = mysqli_query($conn, $sql); //Executing query
-		$result = mysqli_fetch_row($data); //Extracting information from the executed query
-		while($result){ //Condition to loop as long as information is being received
-			$flag++; //Incrementing flag
+
+		if($account == "teacher"){
+			$sql = "SELECT email FROM teachers WHERE email = \"".$email."\"";
+			$data = mysqli_query($conn, $sql); //Executing the query
+
+			if($data == false){ //Checking if the query was executed
+				header("Location: errorLogin.php"); //Redirecting to the error page
+				die; //Terminating this page
+			}
+			
 			$result = mysqli_fetch_row($data); //Extracting information from the executed query
+			
+			if(!$result){
+				$sql = "SELECT username FROM students WHERE username = \"".$userName."\"";
+				$data = mysqli_query($conn, $sql); //Executing the query
+
+				if($data == false){ //Checking if the query was executed
+					header("Location: errorLogin.php"); //Redirecting to the error page
+					die; //Terminating this page
+				}
+				
+				$result = mysqli_fetch_row($data); //Extracting information from the executed query
+				
+				if(!$result){
+					echo $sql = "INSERT INTO teachers (username, password, name, bio, loggedIn, email) VALUES ('".$userName."', '".$passWord."', '".$name."', 'No Data Available', 0, '".$email."')";
+					$data = mysqli_query($conn, $sql); //Executing the query
+					
+					echo $sql = "CREATE TABLE ".$userName."(course VARCHAR(60) PRIMARY KEY)";
+					$data = mysqli_query($conn, $sql); //Executing the query
+					
+					header("Location: login.php");
+					die;
+				}
+				else{
+					header("Location: register.php?failRegister=true");
+					die;
+				}
+			}
+			else{
+				header("Location: register.php?failRegister=true");
+				die;
+			}
 		}
-		
-		//Constructing an sql query to enter the user's information in the table
-		$sql  = "INSERT INTO users (username, password, name, accessRest, flag) VALUES ('".$userName."', '".$passWord."', '".$nameOfUser."', 'user', ".$flag.")";
-		$data = mysqli_query($conn, $sql); //Executing the query
-		header("Location: newUserInformation.php?acessor=admin"); //Redirecting to the next page
-		die; //Terminating this page
-		
+		else{
+			$sql = "SELECT email FROM students WHERE email = \"".$email."\"";
+			$data = mysqli_query($conn, $sql); //Executing the query
+
+			if($data == false){ //Checking if the query was executed
+				header("Location: errorLogin.php"); //Redirecting to the error page
+				die; //Terminating this page
+			}
+			
+			$result = mysqli_fetch_row($data); //Extracting information from the executed query
+			
+			if(!$result){
+				$sql = "SELECT username FROM students WHERE username = \"".$userName."\"";
+				$data = mysqli_query($conn, $sql); //Executing the query
+
+				if($data == false){ //Checking if the query was executed
+					header("Location: errorLogin.php"); //Redirecting to the error page
+					die; //Terminating this page
+				}
+				
+				$result = mysqli_fetch_row($data); //Extracting information from the executed query
+				
+				if(!$result){
+					echo $sql = "INSERT INTO students (username, password, name, bio, loggedIn, email) VALUES ('".$userName."', '".$passWord."', '".$name."', 'No Data Available', 0, '".$email."')";
+					$data = mysqli_query($conn, $sql); //Executing the query
+					
+					echo $sql = "CREATE TABLE ".$userName."(course VARCHAR(60) PRIMARY KEY,  teacher VARCHAR (60))";
+
+					$data = mysqli_query($conn, $sql); //Executing the query
+					
+					header("Location: login.php");
+					die;
+				}
+				else{
+					header("Location: register.php?failRegister=true");
+					die;
+				}
+			}
+			else{
+				header("Location: register.php?failRegister=true");
+				die;
+			}
+		}
 	?>
 </form>
 </body>

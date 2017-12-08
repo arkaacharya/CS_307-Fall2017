@@ -30,17 +30,17 @@ $servername = "localhost"; //Name of server
       <div class="login-page">
         <div class="form" id="form">
           <form class="login-form"
-            action = "validateLogin.php"
+            action = "registerNewUser.php"
             method = "post">
-			<?php if(isset($_GET['failLogin'])){echo "Failed Loin. Please Try Again";} ?>
+			<?php if(isset($_GET['failRegister'])){echo "Failed to register.One or more of the fields are incorrect or already exist.";} ?>
 			<input type="radio" name="account" value="teacher">Teacher</input>
 			<input type="radio" name="account" value="student">Student</input>
-
-            <input type="text" placeholder="email" name="username" size="20" maxlength="70"/>
-
-            <input type="password" placeholder="password" name="password"  size="20" maxlength="20"/>
-            <button id="login">login</button>
-            <p class="message">Not registered? <a href="register.php">Create an account</a></p>
+			<input type="text" placeholder="Name" name="name" size="20" maxlength="30"/>
+            <input type="text" placeholder="Email" name="email" size="20" maxlength="70"/>
+			<input type="text" placeholder="Username" name="userName" size="20" maxlength="30"/>
+            <input type="password" placeholder="Password" name="password"  size="20" maxlength="20"/>
+            <button id="login">Sign Up</button>
+            <p class="message">Already registered? <a href="login.php">Sign In</a></p>
           </form>
         </div>
       </div>
