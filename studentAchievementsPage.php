@@ -8,14 +8,17 @@
 <body>
 
 <?php
+
 	$servername = "localhost"; //Name of the server
 	$dbname = "examination"; //Name of the database
 	$username = "root"; //Username used to connect to the database
 	$password = NULL; //Password used to connect to the database
+
 	$conn = new mysqli($servername, $username, $password, $dbname); //Establishing connection to the database
 	if($conn->error){ //Checking connection for errors
 		die("Could not establish connection to database."); //Terminating the page
 	}
+
 	$userName = $_GET['userName'];
 	
 	$sql = "SELECT name, bio, loggedIn From students WHERE username='".$userName."'";
@@ -27,6 +30,7 @@
 	if(!$result[2]){
 		header("Location: login.php");
 	}
+
 ?>
 
 <div id="wrapper">
@@ -62,16 +66,67 @@
 					<div style="clear: both;">&nbsp;</div>
 
 					<?php
+
+						if(isset($_GET['editBio'])){
+					?>
+					<form
+					action="save_bio.php"
+					method="post">
+						<div class="entry">
+							<h2 class="title">Bio</h2>
+							
+							<input type = "text"
+							name = "userName"
+							size = "50"
+							value="<?php echo $userName ?>"
+							readonly = "readonly"
+							maxlength = "50"
+							style = "display: none"
+							/>
+							
+							<input type = "text"
+							name = "account"
+							size = "50"
+							value="student"
+							readonly = "readonly"
+							maxlength = "50"
+							style = "display: none"
+							/>
+							
+							<textarea
+							name = "bio"
+							size = "300"
+							maxlength = "300"
+							rows = "2"
+							cols = "50">
+							<?php echo $bio; ?>
+							</textarea>
+							
+							<button>Save</button>
+						</div>
+					</form>
+					<?php
+						}
+						else{
+					?>
+					<div class="entry">
+						<h2 class="title">Bio</h2>
+						<h3 class="text"><?php echo $bio; ?></h3>
+						<h3 class="link"><a href="student_page.php?editBio=true&userName=<?php echo $userName; ?>">Edit Bio</a></h3>
+					</div>
+
 						$sql = "SELECT finalPercentage From studentanswers WHERE studentName='".$userName."' AND finalPercentage >= 50";
 						$data = mysqli_query($conn, $sql);
 						$result = mysqli_fetch_row($data);
 						if($result){
 					?>
 						<h3><?php echo "Achievement Unlocked. Passed an Exam with more than 50%" ?><h3>
+
 					<?php
 						}
 					?>
 					
+
 					<?php
 						$sql = "SELECT finalPercentage From studentanswers WHERE studentName='".$userName."' AND finalPercentage = 100";
 						$data = mysqli_query($conn, $sql);
@@ -90,10 +145,16 @@
 						if($result[0] >= 10){
 					?>
 						<h3><?php echo "Achievement Unlocked. Completed more than 10 Exams" ?><h3>
+
 					<?php
 						}
 					?>
 					
+
+					<div>
+						<h3 class="link"><a href="logout.php?account=student&userName=<?php echo $userName; ?>">Logout</a></h3>
+					</div>
+
 					<?php
 						$sql = "SELECT finalPercentage From studentanswers WHERE studentName='".$userName."' AND finalPercentage < 50";
 						$data = mysqli_query($conn, $sql);
@@ -104,6 +165,8 @@
 					<?php
 						}
 					?>
+
+
 					
 					<div style="clear: both;">&nbsp;</div>
 				</div>
@@ -116,5 +179,11 @@
 	<!-- end #page -->
 </div>
 
+
+<div>
+	<p>\n\n</p>
+</div>
+
 </body>
 </html>
+

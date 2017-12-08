@@ -70,10 +70,11 @@
 						
 						<input type="text" name="course" value="<?php echo $course; ?>" style="display: none" />
 						<input type="text" name="userName" value="<?php echo $userName; ?>" style="display: none" />
-						
 						<h4><a href="studentToGrade.php?userName=<?php echo $userName; ?>&course=<?php echo $course; ?>&redirect=gradeEssay">Grade Exams</a></h4>
 						<h4><a href="studentToGrade.php?userName=<?php echo $userName; ?>&course=<?php echo $course; ?>&redirect=review">Review Student Exam</a></h4>
 						<h4><a href="reviewStats.php?userName=<?php echo $userName; ?>&course=<?php echo $course; ?>">Review Test Statistics</a></h4>
+
+
 						<h4><a href="modCourseName.php?userName=<?php echo $userName; ?>&course=<?php echo $course; ?>">Change Course Name</a></h4>
 						<h4><a href="modQues.php?userName=<?php echo $userName; ?>&course=<?php echo $course; ?>">Change Questions and Options</a></h4>
 						<h4><a href="modNumQues.php?userName=<?php echo $userName; ?>&course=<?php echo $course; ?>">Change Number of Questions</a></h4>
@@ -92,9 +93,10 @@
 		$numMCQ = $result[1];
 		$numEssay = $result[2];
 	?>
-	
+
 	<h3>Test Details:</h3>
 	<table>
+
 	<tr><td><font size="+2" face="arial"></br></br>Number of Multiple Choice Questions: <?php echo " ".$numMCQ;?></font></br></tr></td>
 	<tr><td><font size="+2" face="arial">Number of Essay Questions: <?php echo " ".$numEssay;?></font></br></tr></td>
 	</br></br>

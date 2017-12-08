@@ -15,7 +15,7 @@
 		if($conn->error){ //Checking connection for errors
 			die("Could not establish connection to database."); //Terminating this page
 		}
-		
+
 		if($account == "teacher"){
 			echo $sql = "SELECT password FROM teachers WHERE username = \"".$userName."\"";
 			$data = mysqli_query($conn, $sql); //Executing the query
@@ -62,6 +62,7 @@
 				header("Location: login.php?failLogin=true");
 				die;
 			}
+
 		}
 	?>
 </form>

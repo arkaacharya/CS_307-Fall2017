@@ -92,12 +92,14 @@
 						<h4>Num Exam MCQ: <input type="number"
 								name="ExamMCQ"></input></h4>
 
+
 						<h4>Num Essay: <input type="number"
 								name="numEssay"></input></h4>
 								
+
 						<h4>Num Exam Essay: <input type="number"
 								name="ExamEssay"></input></h4>
-								
+
 						<h4>Time Limit: <input type="number"
 								name="timeLimit"></input></h4>
 								
@@ -113,8 +115,11 @@
 							$data = mysqli_query($conn, $sql);
 							$result = mysqli_fetch_row($data);
 							if(!$result){
+
+
 								$sql = "INSERT INTO courses (ID, name, numMCQ, numEssay, ExamMCQ, ExamEssay, timeLimit, owner) 
 										VALUES ('".$_POST['course'].$userName."', '".$_POST['course']."', ".$_POST['numMCQ'].", ".$_POST['numEssay'].", ".$_POST['ExamMCQ'].", ".$_POST['ExamEssay'].", ".$_POST['timeLimit'].",'".$userName."')";
+
 								$data = mysqli_query($conn, $sql);
 								
 								$sql = "INSERT INTO ".$userName." (course) VALUES ('".$_POST['course']."')";
