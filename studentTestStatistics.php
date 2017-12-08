@@ -20,6 +20,7 @@
 	}
 
 	$userName = $_GET['userName'];
+	$course = $_GET['course'];
 	
 	$sql = "SELECT name, bio, loggedIn From students WHERE username='".$userName."'";
 	$data = mysqli_query($conn, $sql);
@@ -47,8 +48,8 @@
 	<div id="menu-wrapper">
 		<div id="menu">
 			<ul>
-				<li class="current_page_item"><a href="studentNotificationsPage.php?userName=<?php echo $userName ?>">Notifications</a></li>
-				<li><a href="studentCoursesPage.php?userName=<?php echo $userName ?>">Courses</a></li>
+				<li><a href="studentNotificationsPage.php?userName=<?php echo $userName ?>">Notifications</a></li>
+				<li class="current_page_item"><a href="studentCoursesPage.php?userName=<?php echo $userName ?>">Courses</a></li>
 				<li><a href="studentAchievementsPage.php?userName=<?php echo $userName ?>">Achievements</a></li>
 				<li><a href="studentAccountPage.php?userName=<?php echo $userName ?>">Account</a></li>
 				<li><a href="logout.php?account=student&userName=<?php echo $userName; ?>">Logout</a></li>
@@ -65,74 +66,41 @@
 					<div style="clear: both;">&nbsp;</div>
 					<div style="clear: both;">&nbsp;</div>
 
-					<?php
-						if(isset($_GET['editBio'])){
-					?>
-					<form
-					action="save_bio.php"
-					method="post">
-						<div class="entry">
-							<h2 class="title">Bio</h2>
-							
-							<input type = "text"
-							name = "userName"
-							size = "50"
-							value="<?php echo $userName ?>"
-							readonly = "readonly"
-							maxlength = "50"
-							style = "display: none"
-							/>
-							
-							<input type = "text"
-							name = "account"
-							size = "50"
-							value="student"
-							readonly = "readonly"
-							maxlength = "50"
-							style = "display: none"
-							/>
-							
-							<textarea
-							name = "bio"
-							size = "300"
-							maxlength = "300"
-							rows = "2"
-							cols = "50">
-							<?php echo $bio; ?>
-							</textarea>
-							
-							<button>Save</button>
-						</div>
-					</form>
-					<?php
-						}
-						else{
-					?>
+					
 					<div class="entry">
-						<h2 class="title">Bio</h2>
-						<h3 class="text"><?php echo $bio; ?></h3>
-						<h3 class="link"><a href="student_page.php?editBio=true&userName=<?php echo $userName; ?>">Edit Bio</a></h3>
+						<h2 class="title"><?php echo $course; ?></h2>
+						<?php
+							$sql = "SELECT totalCorrect, totalEssayGrade, achievedEssayGrade From studentanswers WHERE studentName='".$userName."' AND course='".$course."'";
+							$data = mysqli_query($conn, $sql);
+							$result = mysqli_fetch_row($data);
+							$totalCorrect = $result[0];
+							$totalEssayGrade = $result[1];
+							$achievedEssayGrade = $result[2];
+							
+							$sql = "SELECT MIN(finalPercentage), MAX(finalPercentage), AVG(finalPercentage) FROM studentanswers WHERE course='".$course."'";
+							$data = mysqli_query($conn, $sql);
+							$result = mysqli_fetch_row($data);
+							$min = $result[0];
+							$max = $result[1];
+							$avg = $result[2];
+							
+							$sql = "SELECT numMCQ FROM courses WHERE name='".$course."'";
+							$data = mysqli_query($conn, $sql);
+							$result = mysqli_fetch_row($data);
+						?>
+								<h3><?php echo "Final MCQ Grade: ".$totalCorrect."/".$result[0]; ?></a></h3>
+								<h3><?php echo "Final Essay Grade: ".$achievedEssayGrade."/".$totalEssayGrade; ?></a></h3>
+								<h3><?php echo "Final Percentage: ".(100*($achievedEssayGrade+$totalCorrect)/($result[0]+$totalEssayGrade))."%"; ?></a></h3>
+								</br>
+								<h3><?php echo "Max Grade: ".$max ?></h3>
+								<h3><?php echo "Min Grade: ".$min ?></h3>
+								<h3><?php echo "Average Grade: ".$avg ?></h3>
+								
 					</div>
-					<?php
-						}
-					?>
 					
 					<div>
 						<h3 class="link"><a href="logout.php?account=student&userName=<?php echo $userName; ?>">Logout</a></h3>
 					</div>
-						$sql = "SELECT essayGraded, course From studentanswers WHERE studentName='".$userName."'";
-						$data = mysqli_query($conn, $sql);
-						$result = mysqli_fetch_row($data);
-						
-						while($result){
-							if($result[0]){
-					?>
-						<h3><?php echo $result[1]." has been graded." ?><h3>
-					<?php
-							}
-							$result = mysqli_fetch_row($data);
-						}
-					?>
 					
 					<div style="clear: both;">&nbsp;</div>
 				</div>
@@ -145,8 +113,12 @@
 	<!-- end #page -->
 </div>
 
-<div>
-	<p>\n\n</p>
-</div>
 </body>
 </html>
+
+<script>
+history.pushState(null, null, document.URL);
+window.addEventListener('popstate', function () {
+    history.pushState(null, null, document.URL);
+});
+</script>

@@ -20,6 +20,8 @@
 	}
 
 	$userName = $_GET['userName'];
+	$course = $_GET['course'];
+	$redirect = $_GET['redirect'];
 	
 	$sql = "SELECT name, bio, loggedIn From teachers WHERE username='".$userName."'";
 	$data = mysqli_query($conn, $sql);
@@ -64,74 +66,42 @@
 					<div style="clear: both;">&nbsp;</div>
 					<div style="clear: both;">&nbsp;</div>
 					
-					<form
-					action=""
-					method="post"
-					>
-					<div class="entry">
-						<h2 class="title">Add Course</h2>
-
+						<form
+						action=""
+						method="post"
+						>
+						<h3>Select Students to be Graded</h3>
+						
+						<h4>Select Student:<select name="selectStudent">
+						<option value=""></option>
 						<?php
-						
-							if(isset($_GET['failAddTest'])){
-								?>
-								
-									</h4> Course Already Exists </h4>
-								
-								<?php
-							}
-						
-						?>
-						
-						<h4>Course Name: <input type="text"
-								name="course"></input></h4>
-								
-						<h4>Num MCQ: <input type="number"
-								name="numMCQ"></input></h4>
-								
-						<h4>Num Exam MCQ: <input type="number"
-								name="ExamMCQ"></input></h4>
-
-						<h4>Num Essay: <input type="number"
-								name="numEssay"></input></h4>
-
-						<h4>Num Exam Essay: <input type="number"
-								name="ExamEssay"></input></h4>
-
-						<h4>Time Limit: <input type="number"
-								name="timeLimit"></input></h4>
-								
-						<button id="login">Add Course</button>
-						<h3 class="link"><a href="teacherCoursesPage.php?userName=<?php echo $userName; ?>">Back to Courses</a></h3>
-					</div>
-					</form>
-					
-					<?php
-					
-						if(isset($_POST['course']) && isset($_POST['numMCQ']) && isset($_POST['numEssay']) && isset($_POST['timeLimit'])){
-							$sql = "SELECT * FROM courses WHERE id='".$_POST['course'].$userName."'";
+							$sql = "SELECT name, username From students";
 							$data = mysqli_query($conn, $sql);
 							$result = mysqli_fetch_row($data);
-							if(!$result){
-
-								$sql = "INSERT INTO courses (ID, name, numMCQ, numEssay, ExamMCQ, ExamEssay, timeLimit, owner) 
-										VALUES ('".$_POST['course'].$userName."', '".$_POST['course']."', ".$_POST['numMCQ'].", ".$_POST['numEssay'].", ".$_POST['ExamMCQ'].", ".$_POST['ExamEssay'].", ".$_POST['timeLimit'].",'".$userName."')";
-
-								$data = mysqli_query($conn, $sql);
-								
-								$sql = "INSERT INTO ".$userName." (course) VALUES ('".$_POST['course']."')";
-								$data = mysqli_query($conn, $sql);
-								
-								header("Location: courseQuestions.php?userName=".$userName."&course=".$_POST['course']);
-								die;
+							while($result){
+						?>
+							<option value = "<?php echo $result[1]; ?>"><?php echo $result[0]." - ".$result[1];?></option>
+						<?php
+								$result = mysqli_fetch_row($data);
 							}
-							else{
-								header("Location: teacherAddCourse.php?failAddTest=true&userName=".$userName);
-								die;
+						?>
+						</select></h4>
+						
+						<button id="login">Select Student</button>
+						</form>
+						
+						<?php
+							if(isset($_POST['selectStudent'])){
+								if($redirect == "gradeEssay"){
+									header("Location: gradeEssay.php?userName=".$userName."&student=".$_POST['selectStudent']."&course=".$course);
+								}
+								else if($redirect == "review"){
+									header("Location: reviewStudent.php?userName=".$userName."&student=".$_POST['selectStudent']."&course=".$course);
+								}
 							}
-						}
-					
-					?>
+							
+						?>
+						
 					
 					<div>
 						<h3 class="link"><a href="logout.php?account=teacher&userName=<?php echo $userName; ?>">Logout</a></h3>

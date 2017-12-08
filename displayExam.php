@@ -1,41 +1,68 @@
 <?php
-	$servername = "localhost"; //Name of the server
-	$dbname = "examination"; //Name of the database
-	$username = "root"; //Username used to connect to the database
-	$password = NULL; //Password used to connect to the database
+
+	$servername = "localhost"; //Name of server
+	$dbname = "OnTheExamLine"; //Name of database
+	$username = "root"; //Username user to connect to database
+	$password = NULL; //Password used to connect to server
 
 	$conn = new mysqli($servername, $username, $password, $dbname); //Establishing connection to the database
 	if($conn->error){ //Checking connection for errors
-		die("Could not establish connection to database."); //Terminating the page
+		die("Could not establish connection to database."); //Terminating this page
 	}
+	
+	if(isset($_GET['userName'])){ //Checking if the username has been set
+		$userName = $_GET['userName']; //Getting the value of the username
+	}
+	else if(isset($_POST['userName'])){ //Checking if the username has been set
+		$userName = $_POST['userName']; //Getting the value of the username
+	}
+	else{
+		header("Location: login.php"); //Redirecting to the login page
+		die; //Terminating this page
+	}
+	
+	$testName = $_GET['testNum']; //Getting the name of the test
+	
+	//Constructing an sql query to get the corresponding login value of the user
+	$sql = "SELECT isLoggedIn FROM users WHERE username=\"".$userName."\"";
+	$data = mysqli_query($conn, $sql); //Executing the sql query
+	$result = mysqli_fetch_row($data); //Extracting information from the executed query
+	$isLoggedIn = $result[0]; //Storing the information in another variable
+	
+	//Constructing a query to check if the test has been already taken by the user
+	$sql = "SELECT testTaken FROM useranswers WHERE username=\"".$userName."\" AND formNo=\"".$testName."\"";
+	$data = mysqli_query($conn, $sql); //Executing the query
+	$testTaken = mysqli_fetch_row($data); //Extracting information from the executed query
+	
+	//constructing an sql query to get the name of the user from the apopropriate table
+	$sql = "SELECT name FROM users WHERE username=\"".$userName."\"";
+	$data = mysqli_query($conn, $sql); //Executing the query
+	$result = mysqli_fetch_row($data); //Extracting information from the executed query
+	$name = $result[0]; //Storing the name in another variable
+	
+	if($isLoggedIn && !$testTaken[0]){ //Checking conditions to display the rest of the webpage
 
-	$userName = $_GET['userName'];
-	$course = $_GET['course'];
-	
-	$sql = "SELECT loggedIn From students WHERE username='".$userName."'";
-	$data = mysqli_query($conn, $sql);
-	$result = mysqli_fetch_row($data);
-	
-	if(!$result[0]){
-		header("Location: login.php");
-	}
 ?>
 	<html>
 	<head>
 		<!-- Name on tab of the page -->
 		<title><?php
+
 		$sql = "SELECT teacher FROM ".$userName." WHERE course='".$course."'";
 		$data = mysqli_query($conn, $sql);
 		$result = mysqli_fetch_row($data);
 		$teacher = $result[0];
 		
 		//Constructing an sql query to get the test information
-		$sql = "SELECT timeLimit, numMCQ, numEssay FROM courses WHERE id=\"".$course.$teacher."\"";
+
+		$sql = "SELECT timeLimit, ExamMCQ, ExamEssay, numMCQ, numEssay FROM courses WHERE id=\"".$course.$teacher."\"";
 		$data = mysqli_query($conn, $sql); //Executing the sql query
 		$result = mysqli_fetch_row(mysqli_query($conn, $sql)); //Extracting infromation from the executed query
 		$timeLimit = $result[0]; //Storing the time limit in another variable
-		$numMCQ = $result[1]; //Storing the number of MCQ in another variable
-		$numEssay = $result[2]; //Storing the number of essay questions in another variable
+		$ExamMCQ = $result[1]; //Storing the number of MCQ in another variable
+		$ExamEssay = $result[2]; //Storing the number of essay questions in another variable
+		$numMCQ = $result[3];
+		$numEssay = $result[4];
 		
 		echo $course; //Displaying the test name ?></title>
 
@@ -58,6 +85,7 @@
 	  }
 	}, 1000);
 	</script>
+-->
 
 
 	<head>
@@ -65,6 +93,13 @@
 	<form
 	action = "storeAnswers.php"
 	method = "post">
+
+	<!-- Title of the page -->
+	<font size="+2" face="arial"><center><header><h1><?php echo $testName; ?></h1></header></center>
+	<header> <?php echo "Name: ".$name; ?>
+	</br><?php echo "Username: ".$userName; ?></header></font>
+
+
 	<div id="insideBody">
 	
 	<table border = "0">
@@ -92,23 +127,50 @@
 		<td
 		align  = "left">
 			<textarea
+
 			name = "course"
+
 			size = "700"
 			maxlength = "700"
 			readonly = "readonly"
 			style = "display: none"
 			><?php echo $course ?></textarea>
-			
 			</td>
 	</tr>
 	
 		<?php
 			$i = 1; //Used as a counter
-			//Constructing an sql query to get the question of the test
-			$sql = "SELECT * FROM ".preg_replace('/\s+/', '', $course)." WHERE quesNum=".$i;
-			$data = mysqli_query($conn, $sql); //Executing the sql query
-			$result = mysqli_fetch_row(mysqli_query($conn, $sql)); //Extracting information from the executed query
-			while($result && $i <= $numMCQ){ //Condition to loop as long as information is being received, and the number of questions haven't been exceeded
+
+			while($i <= $ExamMCQ){ //Condition to loop as long as information is being received, and the number of questions haven't been exceeded
+				$quesNum = rand(1, $numMCQ);
+				//Constructing an sql query to get the question of the test
+				$sql = "SELECT * FROM ".preg_replace('/\s+/', '', $course)." WHERE quesNum=".$quesNum;
+				$data = mysqli_query($conn, $sql); //Executing the sql query
+				$result = mysqli_fetch_row($data); //Extracting information from the executed query
+				
+				$sql = "SELECT * FROM ".$userName." WHERE ques".$i."='".$result[1]."'";
+				$data1 = mysqli_query($conn, $sql);
+				if($data1)
+					$res = mysqli_fetch_row($data1);
+				else
+					$res = false;
+				
+				if($res)
+					continue;
+				else{
+					if($data1){
+						$sql = "UPDATE ".$userName." SET ques".$i."='".$result[1]."' WHERE course='".$course."' AND teacher='".$teacher."'";
+						$data1 = mysqli_query($conn, $sql);
+					}
+					else{
+						$sql = "ALTER TABLE ".$userName." ADD ques".$i." VARCHAR(300);";
+						$data = mysqli_query($conn, $sql);
+						
+						$sql = "UPDATE ".$userName." SET ques".$i."='".$result[1]."' WHERE course='".$course."' AND teacher='".$teacher."'";
+						$data1 = mysqli_query($conn, $sql);
+					}
+				}
+
 		?>
 	<tr><td>
 		<!-- Displaying the question -->
@@ -143,21 +205,41 @@
 		
 		<?php
 				$i++; //Inceremnting counter
-				//Constructing an sql query to get the question of the test
-				$sql = "SELECT * FROM ".preg_replace('/\s+/', '', $course)." WHERE quesNum=".$i;
-				$data = mysqli_query($conn, $sql); //Executing the sql query
-				$result = mysqli_fetch_row($data); //Extracting information from the executed query
 			}
 		?>
 	</td></tr>
 
 	<?php
 			$i = 1; //Initializing counter
-			//Constructing an sql query to get the question of the test
-			$sql = "SELECT * FROM ".preg_replace('/\s+/', '', $course)." WHERE quesNum=".($i+$numMCQ);
-			$data = mysqli_query($conn, $sql); //Executing the sql query
-			$result = mysqli_fetch_row(mysqli_query($conn, $sql)); //Extracting information from the executed query
-			while($result && $i <= $numEssay){ //Condition to loop as long as information is being received, and the number of questions haven't been exceeded
+			while($i <= $ExamEssay){ //Condition to loop as long as information is being received, and the number of questions haven't been exceeded
+				//Constructing an sql query to get the question of the test
+				$sql = "SELECT * FROM ".preg_replace('/\s+/', '', $course)." WHERE quesNum=".($i+$numMCQ);
+				$data = mysqli_query($conn, $sql); //Executing the sql query
+				$result = mysqli_fetch_row(mysqli_query($conn, $sql)); //Extracting information from the executed query
+				
+				$sql = "SELECT * FROM ".$userName." WHERE essayQues".$i."='".$result[1]."'";
+				$data1 = mysqli_query($conn, $sql);
+				if($data1)
+					$res = mysqli_fetch_row($data1);
+				else
+					$res = false;
+				
+				if($res)
+					continue;
+				else{
+					if($data1){
+						$sql = "UPDATE ".$userName." SET essayQues".$i."='".$result[1]."' WHERE course='".$course."' AND teacher='".$teacher."'";
+						$data1 = mysqli_query($conn, $sql);
+					}
+					else{
+						$sql = "ALTER TABLE ".$userName." ADD essayQues".$i." VARCHAR(300);";
+						$data = mysqli_query($conn, $sql);
+						
+						$sql = "UPDATE ".$userName." SET essayQues".$i."='".$result[1]."' WHERE course='".$course."' AND teacher='".$teacher."'";
+						$data1 = mysqli_query($conn, $sql);
+					}
+				}
+
 		?>
 	<tr><td>
 		<!-- Displaying the question -->
@@ -174,10 +256,6 @@
 			></textarea>
 		<?php
 				$i++; //Incrementing the counter
-				//Constructing an sql query to get the question of the test
-				$sql = "SELECT * FROM ".preg_replace('/\s+/', '', $course)." WHERE quesNum=".($i+$numMCQ);
-				$data = mysqli_query($conn, $sql); //Executing the sql query
-				$result = mysqli_fetch_row($data); //Extracting information from the executed query
 			}
 		?>
 	</td></tr>
