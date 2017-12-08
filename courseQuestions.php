@@ -214,6 +214,31 @@
 		<h3 class="link"><a href="teacherCoursesPage.php?userName=<?php echo $userName; ?>">Back to Courses</a></h3>
 	</div>
 	</form>
+	
+	<?php
+	
+		if(isset($_POST['course']) && isset($_POST['numMCQ']) && isset($_POST['numEssay']) && isset($_POST['timeLimit'])){
+			$sql = "SELECT * FROM courses WHERE id='".$_POST['course'].$userName."'";
+			$data = mysqli_query($conn, $sql);
+			$result = mysqli_fetch_row($data);
+			if(!$result){
+				$sql = "INSERT INTO courses (ID, name, numMCQ, numEssay, timeLimit, owner) VALUES ('".$_POST['course'].$userName."', '".$_POST['course']."', ".$_POST['numMCQ'].", ".$_POST['numEssay'].", ".$_POST['timeLimit'].",'".$userName."')";
+				$data = mysqli_query($conn, $sql);
+				
+				$sql = "INSERT INTO ".$userName." (course) VALUES ('".$_POST['course']."')";
+				$data = mysqli_query($conn, $sql);
+				
+				header("Location: courseQuestions.php?userName=".$userName."&course=".$course);
+				die;
+			}
+			else{
+				header("Location: teacherAddCourse.php?failAddTest=true&userName=".$userName);
+				die;
+			}
+		}
+	
+	?>
+
 					
 					<div>
 						<h3 class="link"><a href="logout.php?account=teacher&userName=<?php echo $userName; ?>">Logout</a></h3>

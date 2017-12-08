@@ -205,3 +205,24 @@ window.addEventListener('popstate', function () {
     history.pushState(null, null, document.URL);
 });
 </script>
+
+
+<script lang uage="javascript"type="text/javascript">//this code handles the F5/Ctrl+F5/Ctrl+R
+
+document.onkeydown = checkKeycode
+
+function checkKeycode(e){var keycode;if(window.event)
+
+keycode = window.event.keyCode;elseif(e)
+
+keycode = e.which;// Mozilla firefoxif($.browser.mozilla){if(keycode ==116||(e.ctrlKey && keycode ==82)){if(e.preventDefault){
+
+e.preventDefault();
+
+e.stopPropagation();}}}// IEelseif($.browser.msie){if(keycode ==116||(window.event.ctrlKey && keycode ==82)){
+
+window.event.returnValue =false;
+
+window.event.keyCode =0;
+
+window.status ="Refresh is disabled";}}}</script>
