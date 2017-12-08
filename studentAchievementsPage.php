@@ -114,16 +114,19 @@
 						<h3 class="text"><?php echo $bio; ?></h3>
 						<h3 class="link"><a href="student_page.php?editBio=true&userName=<?php echo $userName; ?>">Edit Bio</a></h3>
 					</div>
+
 						$sql = "SELECT finalPercentage From studentanswers WHERE studentName='".$userName."' AND finalPercentage >= 50";
 						$data = mysqli_query($conn, $sql);
 						$result = mysqli_fetch_row($data);
 						if($result){
 					?>
 						<h3><?php echo "Achievement Unlocked. Passed an Exam with more than 50%" ?><h3>
+
 					<?php
 						}
 					?>
 					
+
 					<?php
 						$sql = "SELECT finalPercentage From studentanswers WHERE studentName='".$userName."' AND finalPercentage = 100";
 						$data = mysqli_query($conn, $sql);
@@ -162,6 +165,7 @@
 					<?php
 						}
 					?>
+
 
 					
 					<div style="clear: both;">&nbsp;</div>

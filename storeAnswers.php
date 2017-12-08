@@ -69,7 +69,9 @@ for ($i = 1; $i <= $numMCQ; $i++){ //Loop to check if all the answers are correc
 		else if(isset($_GET['ans'.$i])){ //Checking if the answer has been entered
 			//Constructing an sql query to insert the answer of the user in the correct position
 
+
 			echo $sql = "UPDATE studentanswers SET ans".$i."=\"".$_GET['ans'.$i]."\" WHERE studentname='".$userName."' AND course='".$course."'";
+
 
 			$data = mysqli_query($conn, $sql); //Executing the query
 			if($_GET['ans'.$i] == $adminAns[0]) //Checking if the answer entered by the user is correct
@@ -79,14 +81,18 @@ for ($i = 1; $i <= $numMCQ; $i++){ //Loop to check if all the answers are correc
 	else{
 		//Constructing an sql query to add the appropriate column in the table
 
+
 		echo $sql = "ALTER TABLE studentanswers ADD ans".$i." VARCHAR(1);";
+
 
 		$data = mysqli_query($conn, $sql); //Executing the sql query
 		
 		if(isset($_POST['ans'.$i])){ //Checking if the answer has been entered
 			//Constructing an sql query to insert the answer of the user in the correct position
 
+
 			$sql = "UPDATE studentanswers SET ans".$i."='".$_POST['ans'.$i]."' WHERE studentname='".$userName."' AND course='".$course."'";
+
 
 			$data = mysqli_query($conn, $sql); //Executing the query
 			if($_POST['ans'.$i] == $adminAns[0]) //Checking if the answer entered by the user is correct
@@ -110,6 +116,7 @@ for($i = 1; $i <= $numEssay; $i++){ //Loop for entering the essay answers into t
 		if(isset($_POST['ansEssay'.$i])){ //Checking if the answer was entered
 			//Constructing an sql query to insert the answer of the user in the correct position
 
+
 			$sql = "UPDATE studentanswers SET ansEssay".$i."=\"".$_POST['ansEssay'.$i]."\" WHERE studentname='".$userName."' AND course='".$course."'";
 
 			$data = mysqli_query($conn, $sql); //Executing the query
@@ -118,12 +125,14 @@ for($i = 1; $i <= $numEssay; $i++){ //Loop for entering the essay answers into t
 	else{
 		//Constructing an sql query to add the appropriate column in the table
 
+
 		$sql = "ALTER TABLE studentanswers ADD ansEssay".$i." VARCHAR(300);";
 
 		$data = mysqli_query($conn, $sql); //Executing the query
 		
 		//Constructing an sql query to insert the answer of the user in the correct position
 		if(isset($_POST['ansEssay'.$i])){ //Checking if the answer was entered
+
 
 			$sql = "UPDATE studentanswers SET ansEssay".$i."='".$_POST['ansEssay'.$i]."' WHERE studentname='".$userName."' AND course='".$course."'";
 
@@ -134,14 +143,17 @@ for($i = 1; $i <= $numEssay; $i++){ //Loop for entering the essay answers into t
 
 //Constructing an sql query to to mark the test as completed
 
+
 $sql = "UPDATE studentanswers SET testTaken=true, totalCorrect=".$numCorrect.", finalPercentage=".($numCorrect*100/$numMCQ)." WHERE studentname='".$userName."' AND course='".$course."'";
 $data = mysqli_query($conn, $sql); //Executing the query
 
 //Redirecting to the next page
 header("Location: studentTestStatistics.php?userName=".$userName."&course=".$course);
+
 die; //Terminating this page
 ?>
 
 </form>
 </body>
+
 </html>

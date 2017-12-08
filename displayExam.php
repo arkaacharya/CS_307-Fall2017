@@ -1,4 +1,5 @@
 <?php
+
 	$servername = "localhost"; //Name of server
 	$dbname = "OnTheExamLine"; //Name of database
 	$username = "root"; //Username user to connect to database
@@ -41,12 +42,12 @@
 	
 	if($isLoggedIn && !$testTaken[0]){ //Checking conditions to display the rest of the webpage
 
+
 ?>
 	<html>
 	<head>
 		<!-- Name on tab of the page -->
 		<title><?php
-
 
 		$sql = "SELECT teacher FROM ".$userName." WHERE course='".$course."'";
 		$data = mysqli_query($conn, $sql);
@@ -92,10 +93,12 @@
 	method = "post">
 
 
+
 	<!-- Title of the page -->
 	<font size="+2" face="arial"><center><header><h1><?php echo $testName; ?></h1></header></center>
 	<header> <?php echo "Name: ".$name; ?>
 	</br><?php echo "Username: ".$userName; ?></header></font>
+
 
 	<div id="insideBody">
 	
@@ -132,9 +135,8 @@
 			readonly = "readonly"
 			style = "display: none"
 
+
 			><?php echo $course ?></textarea>
-
-
 			
 			</td>
 	</tr>
@@ -144,7 +146,9 @@
 			//Constructing an sql query to get the question of the test
 
 
+
 			$sql = "SELECT * FROM ".preg_replace('/\s+/', '', $course)." WHERE quesNum=".$i;
+
 
 			$data = mysqli_query($conn, $sql); //Executing the sql query
 			$result = mysqli_fetch_row(mysqli_query($conn, $sql)); //Extracting information from the executed query
@@ -185,6 +189,7 @@
 				$i++; //Inceremnting counter
 				//Constructing an sql query to get the question of the test
 
+
 				$sql = "SELECT * FROM ".preg_replace('/\s+/', '', $course)." WHERE quesNum=".$i;
 
 				$data = mysqli_query($conn, $sql); //Executing the sql query
@@ -195,9 +200,11 @@
 
 	<?php
 
+
 			$i = 1; //Initializing counter
 			//Constructing an sql query to get the question of the test
 			$sql = "SELECT * FROM ".preg_replace('/\s+/', '', $course)." WHERE quesNum=".($i+$numMCQ);
+
 
 			$data = mysqli_query($conn, $sql); //Executing the sql query
 			$result = mysqli_fetch_row(mysqli_query($conn, $sql)); //Extracting information from the executed query
@@ -219,6 +226,7 @@
 		<?php
 				$i++; //Incrementing the counter
 				//Constructing an sql query to get the question of the test
+
 
 				$sql = "SELECT * FROM ".preg_replace('/\s+/', '', $course)." WHERE quesNum=".($i+$numMCQ);
 
@@ -242,6 +250,7 @@
 
 	</body>
 	</html>
+
 
 <!-- JavaScript file used to disable the back button so that the user's can't retake the test -->
 <script>
@@ -271,3 +280,4 @@ window.event.returnValue =false;
 window.event.keyCode =0;
 
 window.status ="Refresh is disabled";}}}</script>
+

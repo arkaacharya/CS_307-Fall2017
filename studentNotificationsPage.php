@@ -135,7 +135,6 @@
 							$result = mysqli_fetch_row($data);
 						}
 					?>
-
 					
 					<div style="clear: both;">&nbsp;</div>
 				</div>
@@ -155,4 +154,3 @@
 </body>
 
 </html>
-
