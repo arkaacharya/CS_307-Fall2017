@@ -47,6 +47,7 @@
 		<!-- Name on tab of the page -->
 		<title><?php
 
+
 		$sql = "SELECT teacher FROM ".$userName." WHERE course='".$course."'";
 		$data = mysqli_query($conn, $sql);
 		$result = mysqli_fetch_row($data);
@@ -61,6 +62,7 @@
 		$numEssay = $result[2]; //Storing the number of essay questions in another variable
 		
 		echo $course; //Displaying the test name ?></title>
+
 
 	<!-- JavaScript used to update the timer -->
 	<script>
@@ -122,12 +124,16 @@
 		<td
 		align  = "left">
 			<textarea
+
 			name = "course"
+
 			size = "700"
 			maxlength = "700"
 			readonly = "readonly"
 			style = "display: none"
+
 			><?php echo $course ?></textarea>
+
 
 			
 			</td>
@@ -136,6 +142,7 @@
 		<?php
 			$i = 1; //Used as a counter
 			//Constructing an sql query to get the question of the test
+
 
 			$sql = "SELECT * FROM ".preg_replace('/\s+/', '', $course)." WHERE quesNum=".$i;
 
@@ -236,7 +243,6 @@
 	</body>
 	</html>
 
-
 <!-- JavaScript file used to disable the back button so that the user's can't retake the test -->
 <script>
 history.pushState(null, null, document.URL);
@@ -265,4 +271,3 @@ window.event.returnValue =false;
 window.event.keyCode =0;
 
 window.status ="Refresh is disabled";}}}</script>
-
