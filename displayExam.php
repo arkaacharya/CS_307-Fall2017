@@ -1,5 +1,6 @@
 <?php
 
+
 	$servername = "localhost"; //Name of server
 	$dbname = "OnTheExamLine"; //Name of database
 	$username = "root"; //Username user to connect to database
@@ -42,7 +43,6 @@
 	
 	if($isLoggedIn && !$testTaken[0]){ //Checking conditions to display the rest of the webpage
 
-
 ?>
 	<html>
 	<head>
@@ -55,6 +55,8 @@
 		$teacher = $result[0];
 		
 		//Constructing an sql query to get the test information
+
+
 		$sql = "SELECT timeLimit, ExamMCQ, ExamEssay, numMCQ, numEssay FROM courses WHERE id=\"".$course.$teacher."\"";
 		$data = mysqli_query($conn, $sql); //Executing the sql query
 		$result = mysqli_fetch_row(mysqli_query($conn, $sql)); //Extracting infromation from the executed query
@@ -63,10 +65,11 @@
 		$ExamEssay = $result[2]; //Storing the number of essay questions in another variable
 		$numMCQ = $result[3];
 		$numEssay = $result[4];
+
 		
 		echo $course; //Displaying the test name ?></title>
 
-	<!-- JavaScript used to update the timer 
+	<!-- JavaScript used to update the timer -->
 	<script>
 	var distance = <?php echo $timeLimit; ?>;
 	distance = distance * 60;
@@ -85,7 +88,7 @@
 	  }
 	}, 1000);
 	</script>
--->
+
 
 	<head>
 	<body>
@@ -94,12 +97,10 @@
 	method = "post">
 
 
-
 	<!-- Title of the page -->
 	<font size="+2" face="arial"><center><header><h1><?php echo $testName; ?></h1></header></center>
 	<header> <?php echo "Name: ".$name; ?>
 	</br><?php echo "Username: ".$userName; ?></header></font>
-
 
 	<div id="insideBody">
 	
@@ -135,15 +136,14 @@
 			maxlength = "700"
 			readonly = "readonly"
 			style = "display: none"
-
-
 			><?php echo $course ?></textarea>
-			
+
 			</td>
 	</tr>
 	
 		<?php
 			$i = 1; //Used as a counter
+
 			while($i <= $ExamMCQ){ //Condition to loop as long as information is being received, and the number of questions haven't been exceeded
 				$quesNum = rand(1, $numMCQ);
 				//Constructing an sql query to get the question of the test
@@ -173,6 +173,7 @@
 						$data1 = mysqli_query($conn, $sql);
 					}
 				}
+
 		?>
 	<tr><td>
 		<!-- Displaying the question -->
@@ -212,8 +213,6 @@
 	</td></tr>
 
 	<?php
-
-
 			$i = 1; //Initializing counter
 			while($i <= $ExamEssay){ //Condition to loop as long as information is being received, and the number of questions haven't been exceeded
 				//Constructing an sql query to get the question of the test
@@ -305,6 +304,4 @@ e.stopPropagation();}}}// IEelseif($.browser.msie){if(keycode ==116||(window.eve
 window.event.returnValue =false;
 
 window.event.keyCode =0;
-
 window.status ="Refresh is disabled";}}}</script>
-

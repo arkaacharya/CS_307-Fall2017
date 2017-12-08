@@ -1,3 +1,4 @@
+
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Exami-Nation</title>
@@ -95,88 +96,112 @@
 	
 	
 	<h3><b><font size="+2" face="arial">Question <?php echo $i." " ?> (Max 300 characters): </font></b></td>
+
 			<textarea
 			name = "ques<?php echo $i?>"
 			size = "300"
 			maxlength = "300"
+
 			rows = "1"
+
 			cols = "50">
 			<?php
 			if($result){
 				echo $result[1];
 			}
 			?>
+
 			</textarea>
 	</h3>
 
 	<h4><font face="arial"> Option a (Max 300 characters): </font></td>
+
 			<textarea
 			name = "opt<?php echo $i?>a"
 			size = "300"
 			maxlength = "300"
+
 			rows = "1"
+
 			cols = "50"
 			><?php
 			if($result){
 				echo $result[4];
 			}
+
 			?></textarea>
 	</h4>
 
 	<h4><font face="arial"> Option b (Max 300 characters): </font></td>
+
 			<textarea
 			name = "opt<?php echo $i?>b"
 			size = "300"
 			maxlength = "300"
+
 			rows = "1"
+
 			cols = "50"
 			><?php
 			if($result){
 				echo $result[5];
 			}
+
 			?></textarea>
 	</h4>
 
 	<h4><font face="arial"> Option c (Max 300 characters): </font></td>
+
 			<textarea
 			name = "opt<?php echo $i?>c"
 			size = "300"
 			maxlength = "300"
+
 			rows = "1"
+
 			cols = "50"
 			><?php
 			if($result){
 				echo $result[6];
 			}
+
 			?></textarea>
 	</h4>
 
 	<h4><font face="arial"> Option d (Max 300 characters): </font></td>
+
 			<textarea
 			name = "opt<?php echo $i?>d"
 			size = "300"
 			maxlength = "300"
+
 			rows = "1"
+
 			cols = "50"
 			><?php
 			if($result){
 				echo $result[7];
 			}
+
 			?></textarea>
 	</h4>
 
 	<h4><font face="arial"> Correct Answer (Max 1 characters): </font></td>
+
 			<input type = "text"
 			name = "ans<?php echo $i?>"
 			size = "1"
 			maxlength = "1"
 			value = "<?php if($result){echo $result[8];} ?>"
+
 			/>
 	</h4>
+
 
 	<?php
 		}
 		
+
 		for($i = 1; $i <= $numEssay; $i++){ //Loop to accept all essay questions
 			$sql = "SELECT * FROM ".preg_replace('/\s+/', '', $course)." WHERE quesNum=".($i+$numMCQ); //Creating sql query to get all the information of a question
 			$data = mysqli_query($conn, $sql); //Executing the sql query
@@ -187,10 +212,12 @@
 	?>
 
 	<h3><b><font size="+2" face="arial">Essay Question <?php echo $i." " ?> (Max 300 characters): </font></b></td>
+
 			<textarea
 			name = "quesEssay<?php echo $i?>"
 			size = "300"
 			maxlength = "300"
+
 			rows = "1"
 			cols = "50"
 			><?php if($result){echo $result[1];} ?></textarea>
@@ -201,6 +228,7 @@
 			name = "ansEssay<?php echo $i?>"
 			size = "700"
 			maxlength = "700"
+
 			rows = "1"
 			cols = "50"
 			><?php if($result){echo $result[9];} ?></textarea>

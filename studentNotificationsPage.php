@@ -66,7 +66,6 @@
 					<div style="clear: both;">&nbsp;</div>
 
 					<?php
-
 						if(isset($_GET['editBio'])){
 					?>
 					<form
@@ -121,7 +120,6 @@
 					<div>
 						<h3 class="link"><a href="logout.php?account=student&userName=<?php echo $userName; ?>">Logout</a></h3>
 					</div>
-
 						$sql = "SELECT essayGraded, course From studentanswers WHERE studentName='".$userName."'";
 						$data = mysqli_query($conn, $sql);
 						$result = mysqli_fetch_row($data);
@@ -150,7 +148,5 @@
 <div>
 	<p>\n\n</p>
 </div>
-
 </body>
-
 </html>

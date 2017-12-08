@@ -17,7 +17,6 @@
 			die("Could not establish connection to database."); //Terminating this page
 		}
 
-
 		if($account == "teacher"){
 			echo $sql = "SELECT password FROM teachers WHERE username = \"".$userName."\"";
 
@@ -69,7 +68,6 @@
 				header("Location: login.php?failLogin=true");
 				die;
 			}
-
 		}
 	?>
 </form>
