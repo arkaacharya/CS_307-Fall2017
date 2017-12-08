@@ -7,6 +7,13 @@
 
 <body>
 
+<style>
+#table{
+    text-align: center;
+    display: table;
+}
+</style>
+
 <?php
 
 	$servername = "localhost"; //Name of the server
@@ -20,6 +27,7 @@
 	}
 
 	$userName = $_GET['userName'];
+	$course = $_GET['course'];
 	
 	$sql = "SELECT name, bio, loggedIn From teachers WHERE username='".$userName."'";
 	$data = mysqli_query($conn, $sql);
@@ -63,29 +71,53 @@
 				<div id="content">
 					<div style="clear: both;">&nbsp;</div>
 					<div style="clear: both;">&nbsp;</div>
+	
+					<h3>Test Statistics</h3>
+					<?php	$sql = "SELECT MIN(finalPercentage), MAX(finalPercentage), AVG(finalPercentage) FROM studentanswers WHERE course='".$course."'";
+					$data = mysqli_query($conn, $sql);
+					$result = mysqli_fetch_row($data);
+					$min = $result[0];
+					$max = $result[1];
+					$avg = $result[2];
+					?>
+						<h4><?php echo "Max Grade: ".$max ?></h4>
+						<h4><?php echo "Min Grade: ".$min ?></h4>
+						<h4><?php echo "Average Grade: ".$avg ?></h4>
 					
-					<div class="entry">
-						<h2 class="title">Courses</h2>
+					</br></br>
+					
+					<h3>Student Scores</h3>
+					
+					<table border="1" id="table">
+						<tr>
+							<td><h4>Student Name</h4></td>
+							<td><h4>Total MCQ Grade</h4></td>
+							<td><h4>Total Essay Grade</h4></td>
+							<td><h4>Final Percentage</h4></td>
+						</tr>
 						<?php
-							$sql = "SELECT course From ".$userName;
-							$data = mysqli_query($conn, $sql);
-							$result = mysqli_fetch_row($data);
+						$sql = "SELECT numMCQ FROM courses WHERE name='".$course."'";
+						$data = mysqli_query($conn, $sql);
+						$result = mysqli_fetch_row($data);
+						$numMCQ = $result[0];
 						
-							while($result){ 
+						$sql = "SELECT studentName, totalCorrect, achievedEssayGrade, totalEssayGrade, finalPercentage FROM studentanswers WHERE course='".$course."'";
+						$data = mysqli_query($conn, $sql);
+						$result = mysqli_fetch_row($data);
+						
+						while($result){
 						?>
-						<h3><a href="modifyCourse.php?userName=<?php echo $userName; ?>&course=<?php echo $result[0]; ?>"><?php echo $result[0]; ?></h3>
+						<tr>
+							<td><h4><?php echo $result[0]; ?></h4></td>
+							<td><h4><?php echo $result[1]."/".$numMCQ; ?></h4></td>
+							<td><h4><?php echo $result[2]."/".$result[3]; ?></h4></td>
+							<td><h4><?php echo $result[4]; ?></h4></td>
+						</tr>
 						<?php
 							$result = mysqli_fetch_row($data);
-							}
+						}
 						?>
-						<h3 class="link"><a href="teacherAddCourse.php?userName=<?php echo $userName; ?>">Add Courses</a></h3>
-						<h3 class="link"><a href="teacherCloneCourse.php?userName=<?php echo $userName; ?>">Clone Courses</a></h3>
-						<h3 class="link"><a href="teacherDeleteCourse.php?userName=<?php echo $userName; ?>">Delete Courses</a></h3>
-
-						<h3 class="link"><a href="teacherChangeCourseName.php?userName=<?php echo $userName; ?>">Change Course Name</a></h3>
-
-					</div>
-					
+					</table>
 					
 					<div>
 						<h3 class="link"><a href="logout.php?account=teacher&userName=<?php echo $userName; ?>">Logout</a></h3>

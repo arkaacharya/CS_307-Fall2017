@@ -20,6 +20,8 @@
 	}
 
 	$userName = $_GET['userName'];
+	$course = $_GET['course'];
+	$student = $_GET['student'];
 	
 	$sql = "SELECT name, bio, loggedIn From teachers WHERE username='".$userName."'";
 	$data = mysqli_query($conn, $sql);
@@ -64,28 +66,79 @@
 					<div style="clear: both;">&nbsp;</div>
 					<div style="clear: both;">&nbsp;</div>
 					
-					<div class="entry">
-						<h2 class="title">Courses</h2>
+						<form
+						action="inputGrades.php"
+						method="post"
+						>
+						
+						<input type = "text"
+						name = "userName"
+						value = <?php echo $userName;?>
+						style = "display: none"
+						readonly />
+						
+						<input type = "text"
+						name = "student"
+						value = <?php echo $student;?>
+						style = "display: none"
+						readonly />
+						
+						<input type = "text"
+						name = "course"
+						value = <?php echo $course;?>
+						style = "display: none"
+						readonly />
+						
+						<h3><?php echo $student.": ".$course ?></h3>
 						<?php
-							$sql = "SELECT course From ".$userName;
+							$sql = "SELECT numEssay,numMCQ From courses WHERE name='".$course."'";
 							$data = mysqli_query($conn, $sql);
 							$result = mysqli_fetch_row($data);
+							$numEssay = $result[0];
+							$numMCQ = $result[1];
+						?>
+						<table>
+							<?php
+								for($i = 1; $i <= $numEssay; $i++){
+									$sql = "SELECT ansEssay".$i." From studentanswers WHERE course='".$course."' AND studentName='".$student."';";
+									$data1 = mysqli_query($conn, $sql);
+									$result1 = mysqli_fetch_row($data1);
+									
+									$sql = "SELECT question, ansEssay From ".preg_replace('/\s+/', '', $course)." WHERE quesNum=".($i+$numMCQ);
+									$data2 = mysqli_query($conn, $sql);
+									$result2 = mysqli_fetch_row($data2);
+							?>
+								<tr>
+									<td>
+									<h4>Question <?php echo " ".$i; ?>: <?php echo " ".$result2[0] ?><h4>
+									<h4>Answer Key: <?php echo " ".$result2[1] ?><h4>
+									<h4>Student Answer: <?php echo " ".$result1[0] ?><h4>
+									<h4>Given Grade: <input type = "number" name = "essay<?php echo $i;?>Grade"/><h4>
+									<h4>Max Possible: <input type = "number" name = "essay<?php echo $i;?>MaxGrade"/><h4>
+									<h4>Feedback: <input type = "text" name = "essay<?php echo $i;?>Feedback"/><h4>
+									</br></br>
+									</td>
+								</tr>
+							<?php
+								}
+							?>
+						</table>
 						
-							while($result){ 
-						?>
-						<h3><a href="modifyCourse.php?userName=<?php echo $userName; ?>&course=<?php echo $result[0]; ?>"><?php echo $result[0]; ?></h3>
+						<button id="login">Submit Grades</button>
+						</form>
+						
 						<?php
-							$result = mysqli_fetch_row($data);
+							if(isset($_POST['selectStudent'])){
+								if($redirect == "gradeEssay"){
+									header("Location: gradeEssay.php?userName=".$userName."&student=".$_POST['selectStudent']."&course=".$course);
+								}
+								else if($redirect == "review"){
+									header("Location: gradeEssay.php?userName=".$userName."&student=".$_POST['selectStudent']."&course=".$course);
+								}
 							}
+							
 						?>
-						<h3 class="link"><a href="teacherAddCourse.php?userName=<?php echo $userName; ?>">Add Courses</a></h3>
-						<h3 class="link"><a href="teacherCloneCourse.php?userName=<?php echo $userName; ?>">Clone Courses</a></h3>
-						<h3 class="link"><a href="teacherDeleteCourse.php?userName=<?php echo $userName; ?>">Delete Courses</a></h3>
-
-						<h3 class="link"><a href="teacherChangeCourseName.php?userName=<?php echo $userName; ?>">Change Course Name</a></h3>
-
-					</div>
-					
+						
 					
 					<div>
 						<h3 class="link"><a href="logout.php?account=teacher&userName=<?php echo $userName; ?>">Logout</a></h3>

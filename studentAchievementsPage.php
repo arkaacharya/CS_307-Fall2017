@@ -66,6 +66,7 @@
 					<div style="clear: both;">&nbsp;</div>
 
 					<?php
+
 						if(isset($_GET['editBio'])){
 					?>
 					<form
@@ -113,13 +114,59 @@
 						<h3 class="text"><?php echo $bio; ?></h3>
 						<h3 class="link"><a href="student_page.php?editBio=true&userName=<?php echo $userName; ?>">Edit Bio</a></h3>
 					</div>
+
+						$sql = "SELECT finalPercentage From studentanswers WHERE studentName='".$userName."' AND finalPercentage >= 50";
+						$data = mysqli_query($conn, $sql);
+						$result = mysqli_fetch_row($data);
+						if($result){
+					?>
+						<h3><?php echo "Achievement Unlocked. Passed an Exam with more than 50%" ?><h3>
+
 					<?php
 						}
 					?>
 					
+
+					<?php
+						$sql = "SELECT finalPercentage From studentanswers WHERE studentName='".$userName."' AND finalPercentage = 100";
+						$data = mysqli_query($conn, $sql);
+						$result = mysqli_fetch_row($data);
+						if($result){
+					?>
+						<h3><?php echo "Achievement Unlocked. Aced an Exam. Received 100%" ?><h3>
+					<?php
+						}
+					?>
+					
+					<?php
+						$sql = "SELECT COUNT(finalPercentage) From studentanswers WHERE studentName='".$userName."'";
+						$data = mysqli_query($conn, $sql);
+						$result = mysqli_fetch_row($data);
+						if($result[0] >= 10){
+					?>
+						<h3><?php echo "Achievement Unlocked. Completed more than 10 Exams" ?><h3>
+
+					<?php
+						}
+					?>
+					
+
 					<div>
 						<h3 class="link"><a href="logout.php?account=student&userName=<?php echo $userName; ?>">Logout</a></h3>
 					</div>
+
+					<?php
+						$sql = "SELECT finalPercentage From studentanswers WHERE studentName='".$userName."' AND finalPercentage < 50";
+						$data = mysqli_query($conn, $sql);
+						$result = mysqli_fetch_row($data);
+						if($result){
+					?>
+						<h3><?php echo "Achievement Unlocked. Failed an Exam with more than 50%" ?><h3>
+					<?php
+						}
+					?>
+
+
 					
 					<div style="clear: both;">&nbsp;</div>
 				</div>
@@ -132,9 +179,11 @@
 	<!-- end #page -->
 </div>
 
+
 <div>
 	<p>\n\n</p>
 </div>
 
 </body>
 </html>
+

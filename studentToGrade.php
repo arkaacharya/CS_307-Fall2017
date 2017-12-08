@@ -20,6 +20,8 @@
 	}
 
 	$userName = $_GET['userName'];
+	$course = $_GET['course'];
+	$redirect = $_GET['redirect'];
 	
 	$sql = "SELECT name, bio, loggedIn From teachers WHERE username='".$userName."'";
 	$data = mysqli_query($conn, $sql);
@@ -64,28 +66,42 @@
 					<div style="clear: both;">&nbsp;</div>
 					<div style="clear: both;">&nbsp;</div>
 					
-					<div class="entry">
-						<h2 class="title">Courses</h2>
+						<form
+						action=""
+						method="post"
+						>
+						<h3>Select Students to be Graded</h3>
+						
+						<h4>Select Student:<select name="selectStudent">
+						<option value=""></option>
 						<?php
-							$sql = "SELECT course From ".$userName;
+							$sql = "SELECT name, username From students";
 							$data = mysqli_query($conn, $sql);
 							$result = mysqli_fetch_row($data);
-						
-							while($result){ 
+							while($result){
 						?>
-						<h3><a href="modifyCourse.php?userName=<?php echo $userName; ?>&course=<?php echo $result[0]; ?>"><?php echo $result[0]; ?></h3>
+							<option value = "<?php echo $result[1]; ?>"><?php echo $result[0]." - ".$result[1];?></option>
 						<?php
-							$result = mysqli_fetch_row($data);
+								$result = mysqli_fetch_row($data);
 							}
 						?>
-						<h3 class="link"><a href="teacherAddCourse.php?userName=<?php echo $userName; ?>">Add Courses</a></h3>
-						<h3 class="link"><a href="teacherCloneCourse.php?userName=<?php echo $userName; ?>">Clone Courses</a></h3>
-						<h3 class="link"><a href="teacherDeleteCourse.php?userName=<?php echo $userName; ?>">Delete Courses</a></h3>
-
-						<h3 class="link"><a href="teacherChangeCourseName.php?userName=<?php echo $userName; ?>">Change Course Name</a></h3>
-
-					</div>
-					
+						</select></h4>
+						
+						<button id="login">Select Student</button>
+						</form>
+						
+						<?php
+							if(isset($_POST['selectStudent'])){
+								if($redirect == "gradeEssay"){
+									header("Location: gradeEssay.php?userName=".$userName."&student=".$_POST['selectStudent']."&course=".$course);
+								}
+								else if($redirect == "review"){
+									header("Location: reviewStudent.php?userName=".$userName."&student=".$_POST['selectStudent']."&course=".$course);
+								}
+							}
+							
+						?>
+						
 					
 					<div>
 						<h3 class="link"><a href="logout.php?account=teacher&userName=<?php echo $userName; ?>">Logout</a></h3>

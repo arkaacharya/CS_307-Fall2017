@@ -21,6 +21,7 @@
 
 	$userName = $_GET['userName'];
 	$course = $_GET['course'];
+	$student = $_GET['student'];
 	
 	$sql = "SELECT name, bio, loggedIn From teachers WHERE username='".$userName."'";
 	$data = mysqli_query($conn, $sql);
@@ -64,26 +65,6 @@
 				<div id="content">
 					<div style="clear: both;">&nbsp;</div>
 					<div style="clear: both;">&nbsp;</div>
-
-					<div class="entry">
-						<h2 class="title"><?php echo $course; ?></h2>
-						
-						<input type="text" name="course" value="<?php echo $course; ?>" style="display: none" />
-						<input type="text" name="userName" value="<?php echo $userName; ?>" style="display: none" />
-						<h4><a href="studentToGrade.php?userName=<?php echo $userName; ?>&course=<?php echo $course; ?>&redirect=gradeEssay">Grade Exams</a></h4>
-						<h4><a href="studentToGrade.php?userName=<?php echo $userName; ?>&course=<?php echo $course; ?>&redirect=review">Review Student Exam</a></h4>
-						<h4><a href="reviewStats.php?userName=<?php echo $userName; ?>&course=<?php echo $course; ?>">Review Test Statistics</a></h4>
-
-
-						<h4><a href="modCourseName.php?userName=<?php echo $userName; ?>&course=<?php echo $course; ?>">Change Course Name</a></h4>
-						<h4><a href="modQues.php?userName=<?php echo $userName; ?>&course=<?php echo $course; ?>">Change Questions and Options</a></h4>
-						<h4><a href="modNumQues.php?userName=<?php echo $userName; ?>&course=<?php echo $course; ?>">Change Number of Questions</a></h4>
-						<h4><a href="delQues.php?userName=<?php echo $userName; ?>&course=<?php echo $course; ?>">Delete Specific Questions</a></h4>
-						<h4><a href="modTime.php?userName=<?php echo $userName; ?>&course=<?php echo $course; ?>">Change Time Limit</a></h4>
-	
-						
-						<h3 class="link"><a href="teacherCoursesPage.php?userName=<?php echo $userName; ?>">Back to Courses</a></h3>
-					</div>
 					
 					<?php
 		$sql = "SELECT timeLimit, numMCQ, numEssay FROM courses WHERE id=\"".$course.$userName."\"";
@@ -93,24 +74,24 @@
 		$numMCQ = $result[1];
 		$numEssay = $result[2];
 	?>
-
-	<h3>Test Details:</h3>
-	<table>
-
-	<tr><td><font size="+2" face="arial"></br></br>Number of Multiple Choice Questions: <?php echo " ".$numMCQ;?></font></br></tr></td>
-	<tr><td><font size="+2" face="arial">Number of Essay Questions: <?php echo " ".$numEssay;?></font></br></tr></td>
-	</br></br>
-	<tr><td><font size="+2" face="arial">Time Limit for Test: <?php echo " ".$timeLimit." ";?> minute(s) </font></br></tr></td>
 	
-					
-					<?php
+	
+	<table>
+	<h3><?php echo $student.": ".$course ?></h3>
+	
+	<?php
 		$i = 1;
 		$sql = "SELECT * FROM ".preg_replace('/\s+/', '', $course)." WHERE quesNum=".$i;
 		$data = mysqli_query($conn, $sql);
 		$result = false;
 		if($data){
 			$result = mysqli_fetch_row(mysqli_query($conn, $sql));
-		}		
+		}
+		
+		$sql = "SELECT ans".$i." FROM studentanswers WHERE course='".$course."' AND studentName='".$student."'";
+		$data1 = mysqli_query($conn, $sql);
+		$result1 = mysqli_fetch_row($data1);
+		
 		while($result && $i <= $numMCQ){
 	?>
 	<tr><td>
@@ -143,12 +124,20 @@
 		</br></br>Correct Answer:
 		<?php
 		echo " ".$result[8];?>
+		
+		</br></br>Student Answer:
+		<?php echo " ".$result1[0]; ?>
 	
 	<?php
 			$i++;
 			$sql = "SELECT * FROM ".preg_replace('/\s+/', '', $course)." WHERE quesNum=".$i;
 			$data = mysqli_query($conn, $sql);
 			$result = mysqli_fetch_row($data);
+			
+			$sql = "SELECT ans".$i." FROM studentanswers WHERE course='".$course."' AND studentName='".$student."'";
+			$data1 = mysqli_query($conn, $sql);
+			if($data1)
+				$result1 = mysqli_fetch_row($data1);
 		}
 	?>
 	</font>
@@ -163,6 +152,12 @@
 			if($data){
 				$result = mysqli_fetch_row(mysqli_query($conn, $sql));
 			}
+			
+			$sql = "SELECT ansEssay".$i." FROM studentanswers WHERE course='".$course."' AND studentName='".$student."'";
+			$data1 = mysqli_query($conn, $sql);
+			if($data1)
+				$result1 = mysqli_fetch_row($data1);
+			
 			while($result && $i <= $numEssay){
 		?>
 	<tr><td>
@@ -176,11 +171,19 @@
 		<?php
 		echo " ".$i.": ".$result[1]." ";?>
 		
+		</br></br>Student Answer
+		<?php echo ": ".$result1[0]; ?>
+		
 		<?php
 				$i++;
 				$sql = "SELECT question, ansEssay FROM ".preg_replace('/\s+/', '', $course)." WHERE quesNum=".($i+$numMCQ);
 				$data = mysqli_query($conn, $sql);
 				$result = mysqli_fetch_row($data);
+				
+				$sql = "SELECT ansEssay".$i." FROM studentanswers WHERE course='".$course."' AND studentName='".$student."'";
+				$data1 = mysqli_query($conn, $sql);
+				if($data1)
+					$result1 = mysqli_fetch_row($data1);
 			}
 		?>
 					
@@ -208,10 +211,6 @@
 						}
 					
 					?>
-					
-					<div>
-						<h3 class="link"><a href="logout.php?account=teacher&userName=<?php echo $userName; ?>">Logout</a></h3>
-					</div>
 					
 					<div style="clear: both;">&nbsp;</div>
 				</div>
