@@ -1,5 +1,4 @@
 
-
 /*
 Design by Free CSS Templates
 http://www.freecsstemplates.org
@@ -7,6 +6,7 @@ Released for free under a Creative Commons Attribution 2.5 License
 */
 
 body {
+
 	background: #76b852; /* fallback for old browsers */
   	background: -webkit-linear-gradient(right, #76b852, #8DC26F);
   	background: -moz-linear-gradient(right, #76b852, #8DC26F);
@@ -23,6 +23,7 @@ body {
 	font-size: 13px;
 	color: #737373;
 	*/
+
 }
 
 h1, h2, h3 {
@@ -52,7 +53,6 @@ p, ul, ol {
 
 ul, ol {
 }
-
 
 
 .entry h2 {
@@ -98,7 +98,9 @@ img.aligncenter {
 
 #header {
 	width: 960px;
+
 	height: 200px;
+
 	margin: 0 auto;
 }
 
@@ -191,7 +193,6 @@ img.aligncenter {
 
 }
 
-
 #menu a {
 	display: block;
 	float: left;
@@ -202,8 +203,10 @@ img.aligncenter {
 	letter-spacing: -1px;
 	text-decoration: none;
 	text-transform: uppercase;
+
 	font-family: "Roboto", sans-serif;
 	font-size: 16px;
+
 	font-weight: normal;
 	color: #FFFFFF;
 	border: none;
@@ -269,6 +272,7 @@ img.aligncenter {
 	text-transform: uppercase;
 	font-size: 10px;
 	color: #FFFFFF;
+
 }
 
 

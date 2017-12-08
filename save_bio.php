@@ -17,11 +17,15 @@
 	if($account == "teacher"){
 		echo $sql = "UPDATE teachers SET bio='".$bio."' WHERE username='".$userName."'";
 		$data = mysqli_query($conn, $sql);
+
 		header("Location: teacherAccountPage.php?userName=".$userName);
+
 	}
 	else{
 		$sql = "UPDATE students SET bio='".$bio."' WHERE username='".$userName."'";
 		$data = mysqli_query($conn, $sql);
+
 		header("Location: studentAccountPage.php?userName=".$userName);
+
 	}
 ?>

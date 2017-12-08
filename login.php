@@ -35,7 +35,9 @@ $servername = "localhost"; //Name of server
 			<?php if(isset($_GET['failLogin'])){echo "Failed Loin. Please Try Again";} ?>
 			<input type="radio" name="account" value="teacher">Teacher</input>
 			<input type="radio" name="account" value="student">Student</input>
+
             <input type="text" placeholder="email" name="username" size="20" maxlength="70"/>
+
             <input type="password" placeholder="password" name="password"  size="20" maxlength="20"/>
             <button id="login">login</button>
             <p class="message">Not registered? <a href="register.php">Create an account</a></p>

@@ -10,13 +10,16 @@
 		echo $userName = $_POST['username']; //Getting the user's username
 		echo $passWord = $_POST['password']; //Getting the user's password
 		echo $account = $_POST['account'];
+
 	
 		$conn = new mysqli($servername, $username, $password, $dbname); //Establishing connection to the database
 		if($conn->error){ //Checking connection for errors
 			die("Could not establish connection to database."); //Terminating this page
 		}
+
 		if($account == "teacher"){
 			echo $sql = "SELECT password FROM teachers WHERE username = \"".$userName."\"";
+
 			$data = mysqli_query($conn, $sql); //Executing the query
 
 			if($data == false){ //Checking if the query was executed
@@ -25,16 +28,19 @@
 			}
 			
 			$result = mysqli_fetch_row($data); //Extracting information from the executed query
-			echo $result[0];
+
+
 			if($password = $result[0]){
 				$sql = "UPDATE teachers SET loggedIn=1 WHERE username = \"".$userName."\"";
 				$data = mysqli_query($conn, $sql); //Executing the query
 				
+
 				header("Location: teacherAccountPage.php?userName=".$userName);
 				die;
 			}
 			else{
 				echo "failed";
+
 				header("Location: login.php?failLogin=true");
 				die;
 			}
@@ -53,8 +59,9 @@
 			if($password = $result[0]){
 				$sql = "UPDATE students SET loggedIn=1 WHERE username = \"".$userName."\"";
 				$data = mysqli_query($conn, $sql); //Executing the query
-				
+			
 				header("Location: studentAccountPage.php?userName=".$userName);
+
 				die;
 			}
 			else{
