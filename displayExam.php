@@ -1,29 +1,52 @@
 <?php
-	$servername = "localhost"; //Name of the server
-	$dbname = "examination"; //Name of the database
-	$username = "root"; //Username used to connect to the database
-	$password = NULL; //Password used to connect to the database
+	$servername = "localhost"; //Name of server
+	$dbname = "OnTheExamLine"; //Name of database
+	$username = "root"; //Username user to connect to database
+	$password = NULL; //Password used to connect to server
 
 	$conn = new mysqli($servername, $username, $password, $dbname); //Establishing connection to the database
 	if($conn->error){ //Checking connection for errors
-		die("Could not establish connection to database."); //Terminating the page
+		die("Could not establish connection to database."); //Terminating this page
 	}
+	
+	if(isset($_GET['userName'])){ //Checking if the username has been set
+		$userName = $_GET['userName']; //Getting the value of the username
+	}
+	else if(isset($_POST['userName'])){ //Checking if the username has been set
+		$userName = $_POST['userName']; //Getting the value of the username
+	}
+	else{
+		header("Location: login.php"); //Redirecting to the login page
+		die; //Terminating this page
+	}
+	
+	$testName = $_GET['testNum']; //Getting the name of the test
+	
+	//Constructing an sql query to get the corresponding login value of the user
+	$sql = "SELECT isLoggedIn FROM users WHERE username=\"".$userName."\"";
+	$data = mysqli_query($conn, $sql); //Executing the sql query
+	$result = mysqli_fetch_row($data); //Extracting information from the executed query
+	$isLoggedIn = $result[0]; //Storing the information in another variable
+	
+	//Constructing a query to check if the test has been already taken by the user
+	$sql = "SELECT testTaken FROM useranswers WHERE username=\"".$userName."\" AND formNo=\"".$testName."\"";
+	$data = mysqli_query($conn, $sql); //Executing the query
+	$testTaken = mysqli_fetch_row($data); //Extracting information from the executed query
+	
+	//constructing an sql query to get the name of the user from the apopropriate table
+	$sql = "SELECT name FROM users WHERE username=\"".$userName."\"";
+	$data = mysqli_query($conn, $sql); //Executing the query
+	$result = mysqli_fetch_row($data); //Extracting information from the executed query
+	$name = $result[0]; //Storing the name in another variable
+	
+	if($isLoggedIn && !$testTaken[0]){ //Checking conditions to display the rest of the webpage
 
-	$userName = $_GET['userName'];
-	$course = $_GET['course'];
-	
-	$sql = "SELECT loggedIn From students WHERE username='".$userName."'";
-	$data = mysqli_query($conn, $sql);
-	$result = mysqli_fetch_row($data);
-	
-	if(!$result[0]){
-		header("Location: login.php");
-	}
 ?>
 	<html>
 	<head>
 		<!-- Name on tab of the page -->
 		<title><?php
+
 		$sql = "SELECT teacher FROM ".$userName." WHERE course='".$course."'";
 		$data = mysqli_query($conn, $sql);
 		$result = mysqli_fetch_row($data);
@@ -65,6 +88,13 @@
 	<form
 	action = "storeAnswers.php"
 	method = "post">
+
+
+	<!-- Title of the page -->
+	<font size="+2" face="arial"><center><header><h1><?php echo $testName; ?></h1></header></center>
+	<header> <?php echo "Name: ".$name; ?>
+	</br><?php echo "Username: ".$userName; ?></header></font>
+
 	<div id="insideBody">
 	
 	<table border = "0">
@@ -98,6 +128,7 @@
 			readonly = "readonly"
 			style = "display: none"
 			><?php echo $course ?></textarea>
+
 			
 			</td>
 	</tr>
@@ -105,7 +136,9 @@
 		<?php
 			$i = 1; //Used as a counter
 			//Constructing an sql query to get the question of the test
+
 			$sql = "SELECT * FROM ".preg_replace('/\s+/', '', $course)." WHERE quesNum=".$i;
+
 			$data = mysqli_query($conn, $sql); //Executing the sql query
 			$result = mysqli_fetch_row(mysqli_query($conn, $sql)); //Extracting information from the executed query
 			while($result && $i <= $numMCQ){ //Condition to loop as long as information is being received, and the number of questions haven't been exceeded
@@ -144,7 +177,9 @@
 		<?php
 				$i++; //Inceremnting counter
 				//Constructing an sql query to get the question of the test
+
 				$sql = "SELECT * FROM ".preg_replace('/\s+/', '', $course)." WHERE quesNum=".$i;
+
 				$data = mysqli_query($conn, $sql); //Executing the sql query
 				$result = mysqli_fetch_row($data); //Extracting information from the executed query
 			}
@@ -152,9 +187,11 @@
 	</td></tr>
 
 	<?php
+
 			$i = 1; //Initializing counter
 			//Constructing an sql query to get the question of the test
 			$sql = "SELECT * FROM ".preg_replace('/\s+/', '', $course)." WHERE quesNum=".($i+$numMCQ);
+
 			$data = mysqli_query($conn, $sql); //Executing the sql query
 			$result = mysqli_fetch_row(mysqli_query($conn, $sql)); //Extracting information from the executed query
 			while($result && $i <= $numEssay){ //Condition to loop as long as information is being received, and the number of questions haven't been exceeded
@@ -175,7 +212,9 @@
 		<?php
 				$i++; //Incrementing the counter
 				//Constructing an sql query to get the question of the test
+
 				$sql = "SELECT * FROM ".preg_replace('/\s+/', '', $course)." WHERE quesNum=".($i+$numMCQ);
+
 				$data = mysqli_query($conn, $sql); //Executing the sql query
 				$result = mysqli_fetch_row($data); //Extracting information from the executed query
 			}
@@ -226,3 +265,4 @@ window.event.returnValue =false;
 window.event.keyCode =0;
 
 window.status ="Refresh is disabled";}}}</script>
+
