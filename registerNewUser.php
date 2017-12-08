@@ -22,12 +22,12 @@
 			header("Location: register.php?failRegister=account");
 			die;
 		}
-	
 		$conn = new mysqli($servername, $username, $password, $dbname); //Establishing connection to the database
 		if($conn->error){ //Checking connection for errors
 			die("Could not establish connection to database."); //Terminating this page
 		}
 		
+
 		if($account == "teacher"){
 			$sql = "SELECT email FROM teachers WHERE email = \"".$email."\"";
 			$data = mysqli_query($conn, $sql); //Executing the query
