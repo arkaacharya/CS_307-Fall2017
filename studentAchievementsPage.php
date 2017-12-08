@@ -142,11 +142,9 @@
 						if($result[0] >= 10){
 					?>
 						<h3><?php echo "Achievement Unlocked. Completed more than 10 Exams" ?><h3>
-
 					<?php
 						}
 					?>
-					
 
 					<div>
 						<h3 class="link"><a href="logout.php?account=student&userName=<?php echo $userName; ?>">Logout</a></h3>
@@ -162,6 +160,7 @@
 					<?php
 						}
 					?>
+
 					
 					<div style="clear: both;">&nbsp;</div>
 				</div>
