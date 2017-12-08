@@ -65,10 +65,10 @@
 					<div style="clear: both;">&nbsp;</div>
 					<div style="clear: both;">&nbsp;</div>
 					
-					<form
-					action="storeQuestions.php"
-					method="post"
-					>
+	<form
+	action="storeNewQuestions.php"
+	method="post"
+	>
 					<div class="entry">
 						<h2 class="title"><?php echo $course; ?></h2>
 						
@@ -84,7 +84,7 @@
 		$numEssay = $result[1]; //Storing the number of essay questions in a separate variable
 		
 		for($i = 1; $i <= $numMCQ; $i++){ //Loop for displaying all the spaces MCQ questions
-			$sql = "SELECT * FROM ".$testName." WHERE quesNum=".$i; //Creating an sql query to get all the information of a question
+			$sql = "SELECT * FROM ".preg_replace('/\s+/', '', $course)." WHERE quesNum=".$i; //Creating an sql query to get all the information of a question
 			$data = mysqli_query($conn, $sql); //Executing the sql query
 			$result=false; //Initializing result
 			if($data){ //Checking if the query was executed
@@ -118,7 +118,7 @@
 			cols = "50"
 			><?php
 			if($result){
-				echo $result[5];
+				echo $result[4];
 			}
 			?></textarea>
 	</h4>
@@ -132,7 +132,7 @@
 			cols = "50"
 			><?php
 			if($result){
-				echo $result[7];
+				echo $result[5];
 			}
 			?></textarea>
 	</h4>
@@ -146,7 +146,7 @@
 			cols = "50"
 			><?php
 			if($result){
-				echo $result[9];
+				echo $result[6];
 			}
 			?></textarea>
 	</h4>
@@ -160,7 +160,7 @@
 			cols = "50"
 			><?php
 			if($result){
-				echo $result[11];
+				echo $result[7];
 			}
 			?></textarea>
 	</h4>
@@ -170,7 +170,7 @@
 			name = "ans<?php echo $i?>"
 			size = "1"
 			maxlength = "1"
-			value = "<?php if($result){echo $result[13];} ?>"
+			value = "<?php if($result){echo $result[8];} ?>"
 			/>
 	</h4>
 
@@ -178,7 +178,7 @@
 		}
 		
 		for($i = 1; $i <= $numEssay; $i++){ //Loop to accept all essay questions
-			$sql = "SELECT * FROM ".$testName." WHERE quesNum=".($i+$numMCQ); //Creating sql query to get all the information of a question
+			$sql = "SELECT * FROM ".preg_replace('/\s+/', '', $course)." WHERE quesNum=".($i+$numMCQ); //Creating sql query to get all the information of a question
 			$data = mysqli_query($conn, $sql); //Executing the sql query
 			$result=false; //Initializing $result
 			if($data){ //Checking if the query was executed
@@ -203,42 +203,17 @@
 			maxlength = "700"
 			rows = "1"
 			cols = "50"
-			><?php if($result){echo $result[1];} ?></textarea>
+			><?php if($result){echo $result[9];} ?></textarea>
 	</h4>
 
 	<?php
 		}
 	?>
 								
-		<button id="login">Add Questions</button>
+		<button id="login">Modify Questions</button>
 		<h3 class="link"><a href="teacherCoursesPage.php?userName=<?php echo $userName; ?>">Back to Courses</a></h3>
 	</div>
 	</form>
-	
-	<?php
-	
-		if(isset($_POST['course']) && isset($_POST['numMCQ']) && isset($_POST['numEssay']) && isset($_POST['timeLimit'])){
-			$sql = "SELECT * FROM courses WHERE id='".$_POST['course'].$userName."'";
-			$data = mysqli_query($conn, $sql);
-			$result = mysqli_fetch_row($data);
-			if(!$result){
-				$sql = "INSERT INTO courses (ID, name, numMCQ, numEssay, timeLimit, owner) VALUES ('".$_POST['course'].$userName."', '".$_POST['course']."', ".$_POST['numMCQ'].", ".$_POST['numEssay'].", ".$_POST['timeLimit'].",'".$userName."')";
-				$data = mysqli_query($conn, $sql);
-				
-				$sql = "INSERT INTO ".$userName." (course) VALUES ('".$_POST['course']."')";
-				$data = mysqli_query($conn, $sql);
-				
-				header("Location: courseQuestions.php?userName=".$userName."&course=".$course);
-				die;
-			}
-			else{
-				header("Location: teacherAddCourse.php?failAddTest=true&userName=".$userName);
-				die;
-			}
-		}
-	
-	?>
-
 					
 					<div>
 						<h3 class="link"><a href="logout.php?account=teacher&userName=<?php echo $userName; ?>">Logout</a></h3>

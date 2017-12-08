@@ -96,7 +96,8 @@
 					echo $sql = "INSERT INTO students (username, password, name, bio, loggedIn, email) VALUES ('".$userName."', '".$passWord."', '".$name."', 'No Data Available', 0, '".$email."')";
 					$data = mysqli_query($conn, $sql); //Executing the query
 					
-					echo $sql = "CREATE TABLE ".$userName."(course VARCHAR(60) PRIMARY KEY)";
+					echo $sql = "CREATE TABLE ".$userName."(course VARCHAR(60) PRIMARY KEY,  teacher VARCHAR (60))";
+
 					$data = mysqli_query($conn, $sql); //Executing the query
 					
 					header("Location: login.php");
