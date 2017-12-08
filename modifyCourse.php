@@ -74,7 +74,6 @@
 						<h4><a href="studentToGrade.php?userName=<?php echo $userName; ?>&course=<?php echo $course; ?>&redirect=review">Review Student Exam</a></h4>
 						<h4><a href="reviewStats.php?userName=<?php echo $userName; ?>&course=<?php echo $course; ?>">Review Test Statistics</a></h4>
 
-
 						<h4><a href="modCourseName.php?userName=<?php echo $userName; ?>&course=<?php echo $course; ?>">Change Course Name</a></h4>
 						<h4><a href="modQues.php?userName=<?php echo $userName; ?>&course=<?php echo $course; ?>">Change Questions and Options</a></h4>
 						<h4><a href="modNumQues.php?userName=<?php echo $userName; ?>&course=<?php echo $course; ?>">Change Number of Questions</a></h4>

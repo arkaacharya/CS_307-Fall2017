@@ -238,7 +238,6 @@
 		}
 	
 	?>
-
 					
 					<div>
 						<h3 class="link"><a href="logout.php?account=teacher&userName=<?php echo $userName; ?>">Logout</a></h3>
