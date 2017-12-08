@@ -28,7 +28,7 @@ $sql = "INSERT INTO studentanswers (studentname, course) VALUES ('".$userName."'
 $data = mysqli_query($conn, $sql);
 
 //Constructing an sql query to get the test information
-$sql = "SELECT numMCQ, numEssay FROM courses WHERE id=\"".$course.$teacher."\"";
+$sql = "SELECT ExamMCQ, ExamEssay FROM courses WHERE id=\"".$course.$teacher."\"";
 $data = mysqli_query($conn, $sql); //Executing the sql query
 $result = mysqli_fetch_row(mysqli_query($conn, $sql)); //Extracting infromation from the executed query
 $numMCQ = $result[0]; //Storing the number of MCQ in another variable
@@ -39,7 +39,11 @@ $numCorrect = 0;
 for ($i = 1; $i <= $numMCQ; $i++){ //Loop to check if all the answers are correct
 	
 	if(isset($_POST['ans'.$i])){
-		$sql = "SELECT corrAns FROM ".preg_replace('/\s+/', '', $course)." WHERE quesNum=\"".$i."\"";
+		$sql = "SELECT ques".$i." FROM ".$userName." WHERE course=\"".$course."\" AND teacher='".$teacher."'";
+		$data = mysqli_query($conn, $sql); //Executing the sql query
+		$resQues = mysqli_fetch_row(mysqli_query($conn, $sql)); //Extracting infromation from the executed query
+		
+		$sql = "SELECT corrAns FROM ".preg_replace('/\s+/', '', $course)." WHERE ques=\"".$resQues[0]."\"";
 		$data = mysqli_query($conn, $sql); //Executing the sql query
 		$result = mysqli_fetch_row(mysqli_query($conn, $sql)); //Extracting infromation from the executed query
 		
